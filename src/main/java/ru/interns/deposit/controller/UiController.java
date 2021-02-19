@@ -32,5 +32,4 @@ public class UiController {
         repository.save(deposit);
         return true;
     }
-
 }

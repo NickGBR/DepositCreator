@@ -12,11 +12,13 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 public class UserDTO {
+    private String email;
     private String name;
     private String surname;
     private String middleName;
     private Long passportNumber;
     private Date dateOfBirthday;
+    private String address;
 
     @Override
     public String toString() {
