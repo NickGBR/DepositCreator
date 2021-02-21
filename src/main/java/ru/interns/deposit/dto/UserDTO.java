@@ -18,16 +18,18 @@ public class UserDTO {
     private String middleName;
     private Long passportNumber;
     private Date dateOfBirthday;
-    private String address;
+    private Long address;
 
     @Override
     public String toString() {
         return "UserDTO{" +
+                "email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", passportNumber=" + passportNumber +
                 ", dateOfBirthday=" + dateOfBirthday +
+                ", address=" + address +
                 '}';
     }
 }
