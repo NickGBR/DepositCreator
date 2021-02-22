@@ -1,6 +1,5 @@
 package ru.interns.deposit.mapper;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

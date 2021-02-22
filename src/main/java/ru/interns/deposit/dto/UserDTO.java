@@ -12,7 +12,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 public class UserDTO {
-    private String email;
+    private String login;
     private String name;
     private String surname;
     private String middleName;
@@ -23,7 +23,7 @@ public class UserDTO {
     @Override
     public String toString() {
         return "UserDTO{" +
-                "email='" + email + '\'' +
+                "login='" + login + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", middleName='" + middleName + '\'' +
