@@ -1,4 +1,4 @@
-package ru.interns.deposit.security;
+package ru.interns.deposit.dto;
 
 import lombok.Data;
 

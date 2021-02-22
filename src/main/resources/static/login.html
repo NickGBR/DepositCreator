@@ -1,0 +1,39 @@
+<html lang="ru">
+<head>
+    <title>Авторизация</title>
+    <meta charset="utf-8">
+
+<!--        <link rel="stylesheet" href="css/styles.css">-->
+<!--        <link rel="stylesheet" href="css/bootstrap-5.0.0/css/bootstrap.css">-->
+<!--        <script src="js/const/api.js" type="text/javascript"></script>-->
+<!--        <script src="js/login.js" type="text/javascript"></script>-->
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.0.0/css/bootstrap.css}">
+    <script th:src="@{/js/const/api.js}" type="text/javascript"></script>
+    <script th:src="@{/js/login.js}" type="text/javascript"></script>
+
+
+</head>
+<body>
+<div class="registration">
+    <h1>Введите логин и пароль</h1>
+
+    <form method="post" action="/api/view/login">
+    <div class="field" id="login_div">
+        <input id="login_input" name="username" placeholder="логин">
+    </div>
+
+    <div class="field" id="password_div">
+        <input id = "password_input" name="password" placeholder="пароль" type="password">
+    </div>
+
+    <div class="field">
+        <button id = "login_button" type="submit">Войти</button>
+        <button id = "registration" type="button" onclick="callRegistrationPage()">Зарегестрироваться</button>
+    </div>
+    </form>
+
+</div>
+</body>
+</html>

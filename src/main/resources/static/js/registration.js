@@ -9,7 +9,7 @@ function create() {
 
 function sendRegistrationRequest(registrationDTO, callback) {
     let request = new XMLHttpRequest();
-    request.open("POST", api.CREATE_POST, true);
+    request.open("POST", api.REGISTRATION_POST_REQUEST, true);
     request.setRequestHeader("Content-Type", "application/json");
     console.log(registrationDTO);
     request.send(registrationDTO);
@@ -23,7 +23,14 @@ function sendRegistrationRequest(registrationDTO, callback) {
 
 
 function getCreatingStatus(data) {
-    alert(data);
+    if(data == true){
+        alert("Регистрация прошла успешно")
+        callLoginPage();
+    }
+    else {
+        document.getElementById("login_div").className = "error"
+        alert("Пользователь с таким логином уже существует")
+    }
 }
 
 function getUserData() {
@@ -44,7 +51,8 @@ function checkInputs() {
 }
 
 function checkInput(id) {
-    let input = document.getElementById(id + input_postfix);
+    let input = document.getElementById(id
+        + input_postfix);
     if (input != null) {
         if (input.value != "") {
             document.getElementById(id + div_postfix).className = "success"
@@ -74,6 +82,10 @@ function checkPassword() {
     document.getElementById("password_check_div").className = "success";
     document.getElementById("password_div").className = "success";
     return true;
+}
+
+function callLoginPage(){
+    window.location.href = api.LOGIN_PAGE;
 }
 
 

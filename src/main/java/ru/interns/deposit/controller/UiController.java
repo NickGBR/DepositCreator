@@ -1,17 +1,13 @@
 package ru.interns.deposit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.interns.deposit.db.repositoiry.DepositRepository;
-import ru.interns.deposit.security.RegistrationDTO;
+import ru.interns.deposit.dto.RegistrationDTO;
 import ru.interns.deposit.mapper.UserMapper;
 
-@Controller
-@RequestMapping("app/")
+@RestController
+@RequestMapping("api/")
 public class UiController {
 
     private UserMapper mapper;
@@ -24,7 +20,7 @@ public class UiController {
     }
 
 
-    @PostMapping("/create")
+    @PostMapping("user/register")
     public @ResponseBody Boolean create(@RequestBody RegistrationDTO registrationDTO){
         System.out.println(registrationDTO);
         //final Deposit deposit = mapper.toEntity(userDTO);
