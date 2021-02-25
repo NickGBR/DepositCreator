@@ -3,10 +3,9 @@ package ru.interns.deposit.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
-@RequestMapping("/api/view/")
+@RequestMapping("/api/v1/view/")
 public class ViewResolverController {
     @GetMapping("/login")
     public String getLoginPage(){
@@ -18,9 +17,9 @@ public class ViewResolverController {
         return "registration";
     }
 
-    @GetMapping("/success")
+    @GetMapping("/main_page")
     public String getSuccess(){
-        return "authorized";
+        return "main_page";
     }
 
     @GetMapping("/error")

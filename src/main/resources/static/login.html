@@ -7,11 +7,14 @@
 <!--        <link rel="stylesheet" href="css/bootstrap-5.0.0/css/bootstrap.css">-->
 <!--        <script src="js/const/api.js" type="text/javascript"></script>-->
 <!--        <script src="js/login.js" type="text/javascript"></script>-->
+<!--    <script src="js/helper/redirect.js" type="text/javascript"></script>-->
 
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap-5.0.0/css/bootstrap.css}">
     <script th:src="@{/js/const/api.js}" type="text/javascript"></script>
+    <script th:src="@{/js/const/keys.js}" type="text/javascript"></script>
     <script th:src="@{/js/login.js}" type="text/javascript"></script>
+    <script th:src="@{/js/helper/redirect.js}" type="text/javascript"></script>
 
 
 </head>
@@ -19,7 +22,7 @@
 <div class="registration">
     <h1>Введите логин и пароль</h1>
 
-    <form method="post" action="/api/view/login">
+
     <div class="field" id="login_div">
         <input id="login_input" name="username" placeholder="логин">
     </div>
@@ -29,10 +32,10 @@
     </div>
 
     <div class="field">
-        <button id = "login_button" type="submit">Войти</button>
+        <button id = "login_button" type="button" onclick="login()">Войти</button>
         <button id = "registration" type="button" onclick="callRegistrationPage()">Зарегестрироваться</button>
     </div>
-    </form>
+
 
 </div>
 </body>
