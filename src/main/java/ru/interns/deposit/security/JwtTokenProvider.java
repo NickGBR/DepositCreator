@@ -31,7 +31,7 @@ public class JwtTokenProvider {
     }
 
     @Value("${jwt.header}")
-    private String authorizationCookieName;
+    private String authorizationHeader;
 
     @Value("${jwt.expiration}")
     private Long expirationTime;
@@ -108,11 +108,15 @@ public class JwtTokenProvider {
      * @param request
      * @return должен вернуть null если токена нет.
      */
-    public String resolveToken(HttpServletRequest request) {
+    public String resolveTokenFromCookie(HttpServletRequest request) {
         return Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(authorizationCookieName))
+                .filter(cookie -> cookie.getName().equals(authorizationHeader))
                 .findFirst()
-                .orElse(new Cookie(authorizationCookieName, null))
+                .orElse(new Cookie(authorizationHeader, null))
                 .getValue();
+    }
+
+    public String resolveTokenFromHeader(HttpServletRequest request) {
+            return request.getHeader(authorizationHeader);
     }
 }

@@ -22,6 +22,11 @@ public class ViewResolverController {
         return "main_page";
     }
 
+    @GetMapping("/add_personal_data_page")
+    public String getAddPersonalDataPage(){
+        return "add_personal_data";
+    }
+
     @GetMapping("/error")
     public String getError(){
         return "not_authorized";
