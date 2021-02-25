@@ -2,7 +2,6 @@ package ru.interns.deposit.external.mvd;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.interns.deposit.external.mvd.enums.RequestStatus;
 
 import java.util.Date;
 

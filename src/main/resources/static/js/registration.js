@@ -3,7 +3,7 @@ let div_postfix = "_div"
 
 function create() {
     let registrationDTO;
-    registrationDTO = JSON.stringify(getUserData());
+    registrationDTO = JSON.stringify(getAuthenticationData());
     if (checkInputs()) sendRegistrationRequest(registrationDTO, getCreatingStatus);
 }
 
@@ -33,7 +33,7 @@ function getCreatingStatus(data) {
     }
 }
 
-function getUserData() {
+function getAuthenticationData() {
     let login = document.getElementById("login_input").value;
     let password = document.getElementById("password_input").value;
     return {
