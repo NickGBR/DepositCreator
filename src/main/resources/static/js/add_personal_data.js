@@ -2,20 +2,19 @@ let kladrId;
 let input_postfix = "_input";
 let div_postfix = "_div"
 
-function create() {
-    let userDTO;
-
-    userDTO = JSON.stringify(getUserData());
-
-    if (checkInputs()) sendRegistrationRequest(userDTO, getCreatingStatus());
+function add() {
+    let personalDataDto;
+    personalDataDto = JSON.stringify(getUserData());
+    if (checkInputs()) sendRegistrationRequest(personalDataDto, getCreatingStatus);
 }
 
-function sendRegistrationRequest(userDTO, callback) {
+function sendRegistrationRequest(personalDataDto, callback) {
     let request = new XMLHttpRequest();
-    request.open("POST", api.CREATE_POST, true);
+    request.open("POST", api.ADD_PERSONAL_DATA_POST_REQUEST, true);
     request.setRequestHeader("Content-Type", "application/json");
-    console.log(userDTO);
-    request.send(userDTO);
+    request.setRequestHeader("Authorization",sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
+    console.log(personalDataDto);
+    request.send(personalDataDto);
     request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
             let response = JSON.parse(request.responseText);
@@ -26,7 +25,15 @@ function sendRegistrationRequest(userDTO, callback) {
 
 
 function getCreatingStatus(data) {
-    alert(data);
+    if(data === 1){
+        alert("Данные успешно добавлены.")
+        changePage(api.MAIN_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
+    }
+    if(data === 0){
+        alert("Вы уже добавили персональные данные, удалите старные данные и повторите попытку!")
+        changePage(api.MAIN_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
+    }
+    else (alert("Проблемы на стороне сервена"))
 }
 
 function getUserData() {
@@ -35,15 +42,18 @@ function getUserData() {
     let middleName = document.getElementById("middle_name_input").value;
     let passportNumber = document.getElementById("passport_number_input").value;
     let dateOfBirthday = document.getElementById("date_of_birthday_input").value;
-    let address = kladrId;
-
+    let address = document.getElementById("address_input").value;
+    //!!MOCK!! пока сервер не работает
+    kladrId = Math.random()*899000 + 100000
+    console.log(kladrId)
     return {
         'name': name,
         'surname': surname,
         'middleName': middleName,
         'passportNumber': passportNumber,
         'dateOfBirthday': dateOfBirthday,
-        'address': address
+        'kladrAddress': kladrId,
+        'address':address
     }
 }
 
@@ -107,12 +117,12 @@ $(function () {
         oneString: true,
         change: function (obj) {
             $('.js-log li').hide();
-            print(obj);
+            check(obj);
         }
     });
 
 
-    function print(obj) {
+    function check(obj) {
         checkAddress(obj);
     }
 

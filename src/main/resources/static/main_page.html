@@ -1,14 +1,63 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html lang="RU">
 <head>
-    <script th:src="@{/js/helper/redirect.js}" type="text/javascript"></script>
+    <title>Title</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.0.0/css/bootstrap.css}">
+    <script th:src="@{/js/utils/redirect.js}" type="text/javascript"></script>
+    <script th:src="@{/js/main_page.js}" type="text/javascript"></script>
     <script th:src="@{/js/const/keys.js}" type="text/javascript"></script>
     <script th:src="@{/js/const/api.js}" type="text/javascript"></script>
+    <script th:src="@{/css/bootstrap-5.0.0/js/bootstrap.min.js}" type="text/javascript"></script>
 
-    <title>Title</title>
+    <!--    <link rel="stylesheet" href="css/styles.css">-->
+    <!--    <link rel="stylesheet" href="css/bootstrap-5.0.0/css/bootstrap.min.css">-->
+    <!--    <script src="js/const/keys.js" type="text/javascript"></script>-->
+    <!--    <script src="js/const/api.js" type="text/javascript"></script>-->
+
+    <!--    <script src="css/bootstrap-5.0.0/js/bootstrap.min.js" type="text/javascript"></script>-->
+
+
 </head>
-<body onload="init()">
-АВТОРИЗАЦИЯ ПРОШЛА УСПЕШНО
+<!--<body onload="initMainPage()">-->
+<body>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                role="tab" aria-controls="home" aria-selected="true">Home
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#deposits_tab" type="button"
+                role="tab" aria-controls="profile" aria-selected="false">Персональные данные
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#personal_data_tab" type="button"
+                role="tab" aria-controls="contact" aria-selected="false">Счета
+        </button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">]
+        <div>Заглушка домашний экран</div>
+    </div>
+
+    <div class="tab-pane fade" id="deposits_tab" role="tabpanel" aria-labelledby="profile-tab">
+        <button onclick="callPersonalDataAddingPage()">add data</button>
+
+    </div>
+
+    <div class="tab-pane fade" id="personal_data_tab" role="deposits_tab" aria-labelledby="contact-tab">
+        <div>Заглушка персональные данные</div>
+    </div>
+</div>
+
+
 </body>
 </html>

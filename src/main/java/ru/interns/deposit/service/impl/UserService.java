@@ -3,6 +3,8 @@ package ru.interns.deposit.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -45,7 +47,15 @@ public class UserService {
         usersRepository.save(data);
     }
 
-    public User getUserByLogin(String login){
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            return getUserByLogin(authentication.getName());
+        }
+        return null;
+    }
+
+    public User getUserByLogin(String login) {
         return usersRepository.findByLogin(login).orElseThrow(()
                 -> new UsernameNotFoundException("User doesn't exist."));
     }
