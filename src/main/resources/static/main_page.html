@@ -41,8 +41,18 @@
                 role="tab" aria-controls="contact" aria-selected="false">Счета
         </button>
     </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="jms_mvd_test" data-bs-toggle="tab" data-bs-target="#mvd_test" type="button"
+                role="tab" aria-controls="contact" aria-selected="false">jms test
+        </button>
+    </li>
 </ul>
 <div class="tab-content" id="myTabContent">
+
+    <div class="tab-pane fade show active" id="mvd_test" role="tabpanel" aria-labelledby="jms_mvd_test-tab">]
+        <div><button onclick="sendJms()">send jms</button></div>
+    </div>
+
 
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">]
         <div>Заглушка домашний экран</div>

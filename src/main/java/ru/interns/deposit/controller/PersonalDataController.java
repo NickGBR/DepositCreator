@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.dto.PersonalDataDTO;
 import ru.interns.deposit.service.impl.PersonalDataService;
-import java.util.*;
 
 
 @RestController
