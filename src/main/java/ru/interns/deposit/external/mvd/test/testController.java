@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.external.mvd.dto.MvdRequestDTO;
+import ru.interns.deposit.external.mvd.enums.CheckType;
 import ru.interns.deposit.mapper.PersonalDataMapper;
 import ru.interns.deposit.service.impl.PersonalDataService;
 import ru.interns.deposit.service.impl.UserService;
@@ -45,6 +46,8 @@ public class testController {
         Message message = new ActiveMQMessage();
         final PersonalData personalData = personalDataService.get();
         final MvdRequestDTO mvdRequestDTO = mapper.toMvdRequest(personalData);
+
+        mvdRequestDTO.setCheckTypeCode(CheckType.CHECK_BY_NAME_AND_ADDRESS.getCode());
 
         final String jsonString = jsonMapper.writeValueAsString(mvdRequestDTO);
 

@@ -1,6 +1,7 @@
 package ru.interns.deposit.external.mvd.dto;
 
 import lombok.*;
+import ru.interns.deposit.external.mvd.enums.CheckType;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ public class MvdRequestDTO {
     private Long passportNumber;
     private Date dateOfBirthday;
     private Long kladrAddress;
+    private int checkTypeCode;
 
     @Override
     public String toString() {
