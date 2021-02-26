@@ -5,73 +5,120 @@
     <title>Title</title>
     <meta charset="utf-8">
 
-<!--    <link rel="stylesheet" th:href="@{/css/styles.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/css/bootstrap-5.0.0/css/bootstrap.css}">-->
-<!--    <script th:src="@{/js/utils/redirect.js}" type="text/javascript"></script>-->
-<!--    <script th:src="@{/js/main_page.js}" type="text/javascript"></script>-->
-<!--    <script th:src="@{/js/const/keys.js}" type="text/javascript"></script>-->
-<!--    <script th:src="@{/js/const/api.js}" type="text/javascript"></script>-->
-<!--    <script th:src="@{/css/bootstrap-5.0.0/js/bootstrap.min.js}" type="text/javascript"></script>-->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.0.0/css/bootstrap.css}">
+    <script th:src="@{/js/utils/redirect.js}" type="text/javascript"></script>
+    <script th:src="@{/js/main_page.js}" type="text/javascript"></script>
+    <script th:src="@{/js/const/keys.js}" type="text/javascript"></script>
+    <script th:src="@{/js/const/api.js}" type="text/javascript"></script>
+    <script th:src="@{/css/bootstrap-5.0.0/js/bootstrap.min.js}" type="text/javascript"></script>
 
-        <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="css/bootstrap-5.0.0/css/bootstrap.min.css">
-        <script src="js/const/keys.js" type="text/javascript"></script>
-        <script src="js/const/api.js" type="text/javascript"></script>
-
-        <script src="css/bootstrap-5.0.0/js/bootstrap.min.js" type="text/javascript"></script>
+<!--        <link rel="stylesheet" href="css/styles.css">-->
+<!--        <link rel="stylesheet" href="css/bootstrap-5.0.0/css/bootstrap.min.css">-->
+<!--        <script src="js/const/keys.js" type="text/javascript"></script>-->
+<!--        <script src="js/const/api.js" type="text/javascript"></script>-->
+<!--        <script src="js/main_page.js" type="text/javascript"></script>-->
+<!--        <script src="css/bootstrap-5.0.0/js/bootstrap.min.js" type="text/javascript"></script>-->
 
 
 </head>
-<!--<body onload="initMainPage()">-->
-<body>
+<body onload="initMainPage()">
+<!--<body>-->
 
+<!-- Насторойка вкладок-->
 <ul class="nav nav-tabs" id="myTab" role="tablist">
 
-    <li class="nav-item" >
+    <li class="nav-item active">
         <button class="nav-link active" id="home_tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                role="tab" aria-selected="true">Home
+                role="tab">Home
+        </button>
+    </li>
+
+    <li class="nav-item" id="deposit_holder">
+        <button class="nav-link" id="deposit_holder_button" data-bs-toggle="tab" data-bs-target="#deposits_tab" type="button"
+                role="tab">Счета
         </button>
     </li>
 
     <li class="nav-item">
-        <button class="nav-link" id="contact_tab" data-bs-toggle="tab" data-bs-target="#deposits_tab" type="button"
-                role="tab" aria-selected="false">Счета
-        </button>
-    </li>
-
-    <li class="nav-item">
-        <button class="nav-link" id="profile_tab" data-bs-toggle="tab" data-bs-target="#personal_data_tab" type="button"
-                role="tab" aria-selected="false">Персональные данные
+        <button class="nav-link" id="personal_data_holder" data-bs-toggle="tab" data-bs-target="#personal_data"
+                type="button"
+                role="tab">Персональные данные
         </button>
     </li>
 
     <li class="nav-item">
         <button class="nav-link" id="jms_mvd_test" data-bs-toggle="tab" data-bs-target="#jms_test" type="button"
-                role="tab" aria-selected="false">jms test
+                role="tab">jms test
         </button>
+        <div data-bs-target=""></div>
     </li>
 </ul>
-<div class="tab-content" id="myTabContent">
 
+<!-- Насторйка контента вкладок-->
+<div class="tab-content" id="tabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel">
         <div>Заглушка домашний экран</div>
     </div>
 
-        <div class="tab-pane fade" id="deposits_tab" role="tabpanel">
-            <p>Заглушка депозиты</p>
-        </div>
-
-    <div class="tab-pane fade" id="personal_data_tab" role="deposits_tab">
-        <div>Заглушка персональные данные</div>
-        <button onclick="callPersonalDataAddingPage()">add data</button>
+    <div class="tab-pane fade" id="deposits_tab" role="tabpanel">
+        <p>ОСТАЛОСЬ</p>
+        <p>СОЗДАТЬ ОТКРЫТЬ СОКЕТ ПРИ НАЖАТИИ КНОПКИ ОТКРЫТИЯ СЧЕТА</p>
+        <p>СДЕАТЬ МЕТОДЫ НА ЗАПРОС ОТКРЫТИЯ ЗАКРЫТИЯ СЧЕТА</p>
+        <p>СОЗДАТЬ ТАБЛИЦУ В КОТОРОЙ БУДЕТ РЕЗУЛЬТАТ ОТКРЫТИЯ СЧЕТА</p>
+        <p>ОСТАЛОСЬ</p>
     </div>
 
-        <div class="tab-pane fade" id="jms_test" role="tabpanel" aria-labelledby="jms_mvd_test-tab">
-            <div><button onclick="sendJms()">send jms</button></div>
+    <div class="tab-pane fade" id="jms_test" role="tabpanel">
+        <div>
+            <button onclick="sendJms()">send jms</button>
         </div>
+    </div>
+
+    <div class="tab-pane fade" id="personal_data" role="tabpanel">
+        <div id=personal_data_empty>
+            <div id="personal data header" class="d-flex justify-content-center">
+                <h5>
+                    <p class="d-flex justify-content-center">Персональные данные не заполнены,</p>
+                    <p class="d-flex justify-content-center"> для открытия счета необходимо заполнить персональные данные. </p>
+                </h5>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button id="add_personal_data_button" type="button" class="btn btn-primary"
+                        onclick="callPersonalDataAddingPage()">
+                    Заполнить
+                </button>
+            </div>
+        </div>
+        <div id=personal_data_exist>
+            <table class="table">
+                <!--    <thead>-->
+                <!--    </thead>-->
+                <tbody>
+                <tr>
+                    <th scope="row">ФИО</th>
+                    <td id="FIO_row"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Номер пасспорта</th>
+                    <td id=passport_number_row></td>
+                </tr>
+                <tr>
+                    <th scope="row">Дата рождения</th>
+                    <td id="date_of_birthday_row"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Адрес</th>
+                    <td id="address_row"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="deletePersonalData()">Удалить данные</button>
+            </div>
+        </div>
+    </div>
 
 </div>
-
-
 </body>
 </html>

@@ -10,7 +10,7 @@ function add() {
 
 function sendRegistrationRequest(personalDataDto, callback) {
     let request = new XMLHttpRequest();
-    request.open("POST", api.ADD_PERSONAL_DATA_POST_REQUEST, true);
+    request.open("POST", api.PERSONAL_DATA_POST_REQUEST, true);
     request.setRequestHeader("Content-Type", "application/json");
     request.setRequestHeader("Authorization",sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
     console.log(personalDataDto);
@@ -29,7 +29,7 @@ function getCreatingStatus(data) {
         alert("Данные успешно добавлены.")
         changePage(api.MAIN_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
     }
-    if(data === 0){
+    else if(data === 0){
         alert("Вы уже добавили персональные данные, удалите старные данные и повторите попытку!")
         changePage(api.MAIN_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
     }
