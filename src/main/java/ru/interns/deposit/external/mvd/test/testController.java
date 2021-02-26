@@ -2,8 +2,10 @@ package ru.interns.deposit.external.mvd.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.apache.activemq.command.ActiveMQMessage;
 import org.apache.activemq.Message;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ public class testController {
     private UserService userService;
     private PersonalDataService personalDataService;
     private PersonalDataMapper mapper;
-    private final String queueUrl = "url";
+    private final String queueName = "name";
 
     @Autowired
     public testController(JmsTemplate jmsTemplate, UserService userService,
@@ -48,6 +50,8 @@ public class testController {
 
         message.setJMSCorrelationID(uuid.toString());
         message.setStringProperty("JSONOBJECT", jsonString);
-        jmsTemplate.convertAndSend(queueUrl, message);
+        jmsTemplate.convertAndSend(queueName, message);
+
+        JSONObject jsonObject = new JSONObject(message.getStringProperty("JSONOBJECT"));
     }
 }

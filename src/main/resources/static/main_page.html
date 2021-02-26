@@ -5,20 +5,20 @@
     <title>Title</title>
     <meta charset="utf-8">
 
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/bootstrap-5.0.0/css/bootstrap.css}">
-    <script th:src="@{/js/utils/redirect.js}" type="text/javascript"></script>
-    <script th:src="@{/js/main_page.js}" type="text/javascript"></script>
-    <script th:src="@{/js/const/keys.js}" type="text/javascript"></script>
-    <script th:src="@{/js/const/api.js}" type="text/javascript"></script>
-    <script th:src="@{/css/bootstrap-5.0.0/js/bootstrap.min.js}" type="text/javascript"></script>
+<!--    <link rel="stylesheet" th:href="@{/css/styles.css}">-->
+<!--    <link rel="stylesheet" th:href="@{/css/bootstrap-5.0.0/css/bootstrap.css}">-->
+<!--    <script th:src="@{/js/utils/redirect.js}" type="text/javascript"></script>-->
+<!--    <script th:src="@{/js/main_page.js}" type="text/javascript"></script>-->
+<!--    <script th:src="@{/js/const/keys.js}" type="text/javascript"></script>-->
+<!--    <script th:src="@{/js/const/api.js}" type="text/javascript"></script>-->
+<!--    <script th:src="@{/css/bootstrap-5.0.0/js/bootstrap.min.js}" type="text/javascript"></script>-->
 
-    <!--    <link rel="stylesheet" href="css/styles.css">-->
-    <!--    <link rel="stylesheet" href="css/bootstrap-5.0.0/css/bootstrap.min.css">-->
-    <!--    <script src="js/const/keys.js" type="text/javascript"></script>-->
-    <!--    <script src="js/const/api.js" type="text/javascript"></script>-->
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/bootstrap-5.0.0/css/bootstrap.min.css">
+        <script src="js/const/keys.js" type="text/javascript"></script>
+        <script src="js/const/api.js" type="text/javascript"></script>
 
-    <!--    <script src="css/bootstrap-5.0.0/js/bootstrap.min.js" type="text/javascript"></script>-->
+        <script src="css/bootstrap-5.0.0/js/bootstrap.min.js" type="text/javascript"></script>
 
 
 </head>
@@ -26,46 +26,50 @@
 <body>
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                role="tab" aria-controls="home" aria-selected="true">Home
+
+    <li class="nav-item" >
+        <button class="nav-link active" id="home_tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                role="tab" aria-selected="true">Home
         </button>
     </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#deposits_tab" type="button"
-                role="tab" aria-controls="profile" aria-selected="false">Персональные данные
+
+    <li class="nav-item">
+        <button class="nav-link" id="contact_tab" data-bs-toggle="tab" data-bs-target="#deposits_tab" type="button"
+                role="tab" aria-selected="false">Счета
         </button>
     </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#personal_data_tab" type="button"
-                role="tab" aria-controls="contact" aria-selected="false">Счета
+
+    <li class="nav-item">
+        <button class="nav-link" id="profile_tab" data-bs-toggle="tab" data-bs-target="#personal_data_tab" type="button"
+                role="tab" aria-selected="false">Персональные данные
         </button>
     </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="jms_mvd_test" data-bs-toggle="tab" data-bs-target="#mvd_test" type="button"
-                role="tab" aria-controls="contact" aria-selected="false">jms test
+
+    <li class="nav-item">
+        <button class="nav-link" id="jms_mvd_test" data-bs-toggle="tab" data-bs-target="#jms_test" type="button"
+                role="tab" aria-selected="false">jms test
         </button>
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
 
-    <div class="tab-pane fade show active" id="mvd_test" role="tabpanel" aria-labelledby="jms_mvd_test-tab">]
-        <div><button onclick="sendJms()">send jms</button></div>
-    </div>
-
-
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">]
+    <div class="tab-pane fade show active" id="home" role="tabpanel">
         <div>Заглушка домашний экран</div>
     </div>
 
-    <div class="tab-pane fade" id="deposits_tab" role="tabpanel" aria-labelledby="profile-tab">
-        <button onclick="callPersonalDataAddingPage()">add data</button>
+        <div class="tab-pane fade" id="deposits_tab" role="tabpanel">
+            <p>Заглушка депозиты</p>
+        </div>
 
-    </div>
-
-    <div class="tab-pane fade" id="personal_data_tab" role="deposits_tab" aria-labelledby="contact-tab">
+    <div class="tab-pane fade" id="personal_data_tab" role="deposits_tab">
         <div>Заглушка персональные данные</div>
+        <button onclick="callPersonalDataAddingPage()">add data</button>
     </div>
+
+        <div class="tab-pane fade" id="jms_test" role="tabpanel" aria-labelledby="jms_mvd_test-tab">
+            <div><button onclick="sendJms()">send jms</button></div>
+        </div>
+
 </div>
 
 
