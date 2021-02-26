@@ -8,6 +8,7 @@ function create() {
 
     request.open("POST", api.CREATE_POST, true);
     request.setRequestHeader("Content-Type", "application/json");
+
     userDTO = JSON.stringify(getUserData());
     console.log(userDTO);
     request.send(userDTO);
@@ -41,4 +42,17 @@ function create() {
 
 function callPersonalDataAddingPage(){
 changePage(api.ADD_PERSONAL_DATA_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
+}
+
+
+//Pavel test
+function sendJms(){
+    console.log("text");
+    let request = new XMLHttpRequest();
+
+    request.open("GET", "/test_jms", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.setRequestHeader("Authorization",sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
+    request.send();
+
 }
