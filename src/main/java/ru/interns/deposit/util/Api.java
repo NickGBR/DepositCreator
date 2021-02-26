@@ -4,11 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum Api {
-    ADD_PERSONAL_DATA_POST_REQUEST("/api/v1/user/add_data"),
-    GET_PERSONAL_DATA_GET_REQUEST("/api/v1/user/get_data"),
-    REGISTRATION_POST_REQUEST("/api/v1/auth/registration"),
-    LOGIN_POST_REQUEST("/api/v1/auth/login"),
 
+    PERSONAL_DATA_POST_REQUEST  ("/api/v1/user/personal_data/add"),
+    PERSONAL_DATA_GET_REQUEST  ("/api/v1/user/personal_data/get"),
+    PERSONAL_DATA_DELETE_REQUEST ("/api/v1/user/personal_data/delete"),
+    LOGIN_POST_REQUEST("/api/v1/auth/login"),
+    REGISTRATION_POST_REQUEST("/api/v1/auth/registration"),
 
     LOGIN_PAGE("/api/v1/view/login"),
     REGISTRATION_PAGE("/api/v1/view/registration"),

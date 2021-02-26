@@ -15,4 +15,6 @@ public interface PersonalDataMapper {
     PersonalData toEntity(PersonalDataDTO source);
 
     MvdRequestDTO toMvdRequest(PersonalData source);
+
+    PersonalDataDTO toDto(PersonalData source);
 }

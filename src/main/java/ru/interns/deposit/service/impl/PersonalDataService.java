@@ -2,6 +2,7 @@ package ru.interns.deposit.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.db.repositoiry.PersonalDataRepository;
 import ru.interns.deposit.dto.PersonalDataDTO;
@@ -44,5 +45,18 @@ public class PersonalDataService {
                 .getCurrentUser()
                 .getId()
         );
+    }
+
+    @Transactional
+    public Boolean delete() {
+        final PersonalData personalData = personalDataRepository
+                .getByForeignKey(userService
+                        .getCurrentUser()
+                        .getId());
+        System.out.println(personalData);
+        if (personalData != null) {
+            personalDataRepository.delete(personalData);
+            return true;
+        } else return false;
     }
 }
