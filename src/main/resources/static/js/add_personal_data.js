@@ -43,8 +43,8 @@ function getUserData() {
     let passportNumber = document.getElementById("passport_number_input").value;
     let dateOfBirthday = document.getElementById("date_of_birthday_input").value;
     let address = document.getElementById("address_input").value;
-    //!!MOCK!! пока сервер не работает
-    kladrId = Math.random()*899000 + 100000
+    // !!MOCK!! пока сервер не работает
+    // kladrId = Math.random()*899000 + 100000
     console.log(kladrId)
     return {
         'name': name,
