@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.dto.PersonalDataDTO;
+import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.external.mvd.dto.MvdRequestDTO;
 
 
@@ -17,4 +18,6 @@ public interface PersonalDataMapper {
     MvdRequestDTO toMvdRequest(PersonalData source);
 
     PersonalDataDTO toDto(PersonalData source);
+
+    UserDTO toUserDto(PersonalData data);
 }

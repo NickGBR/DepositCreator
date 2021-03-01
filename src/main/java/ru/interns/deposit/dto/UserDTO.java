@@ -6,30 +6,31 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 public class UserDTO {
-    private String login;
     private String name;
     private String surname;
     private String middleName;
     private Long passportNumber;
     private Date dateOfBirthday;
-    private Long address;
+    private Long kladrAddress;
+    private UUID uuid;
 
     @Override
     public String toString() {
         return "UserDTO{" +
-                "login='" + login + '\'' +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", passportNumber=" + passportNumber +
                 ", dateOfBirthday=" + dateOfBirthday +
-                ", address=" + address +
+                ", kladrAddress=" + kladrAddress +
+                ", uuid=" + uuid +
                 '}';
     }
 }
