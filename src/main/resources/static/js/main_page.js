@@ -7,6 +7,17 @@ function initMainPage() {
     getPersonalDataRequest();
 }
 
+function openDepositRequest(){
+    let request = new XMLHttpRequest();
+
+    request.open("GET", api.OPEN_DEPOSIT_GET_REQUEST, true);
+    request.setRequestHeader("Authorization", sessionStorage.getItem(keys.AUTHORIZATION_TOKEN));
+    request.send();
+    request.onreadystatechange = function (){
+        console.log(request.responseText);
+    }
+}
+
 function getPersonalDataRequest() {
     let request = new XMLHttpRequest();
 
