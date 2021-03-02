@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public SecurityConfig(
-                          JwtTokenFilter tokenFilter) {
+            JwtTokenFilter tokenFilter) {
 
         this.tokenFilter = tokenFilter;
     }
@@ -44,7 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             new AntPathRequestMatcher("/css/**"),
             new AntPathRequestMatcher("/js/**"),
             new AntPathRequestMatcher("/image/**"),
-            new AntPathRequestMatcher("/favicon.ico")
+            new AntPathRequestMatcher("/favicon.ico"),
+            new AntPathRequestMatcher(Api.SOCKET_ENDPOINT.getUrl()+"info")
+            //Test
+           // new AntPathRequestMatcher("ws://localhost:8080/api/v1/socket/*")
 
 
     );
@@ -65,53 +68,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(PUBLIC_API_URLS).permitAll()
                 .anyRequest()
                 .authenticated();
-                //.and()
-                //.apply(jwtConfigurer);
     }
 
-
-//        @Override
-//        protected void configure(HttpSecurity http) throws Exception {
-//            http
-//                    .csrf().disable()
-//            .authorizeRequests()
-//            .requestMatchers(PUBLIC_API_URLS)
-//            .permitAll();
-    // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    // .and()
-    //   .authorizeRequests()
-//                    .requestMatchers(PUBLIC_API_URLS)
-//                    .permitAll()
-    //   .anyRequest()
-    //     .permitAll();
-    //.authenticated()
-    // .and()
-    //.apply(jwtConfigurer)
-//                    .and()
-//                    .formLogin()
-//                    .loginPage(Api.LOGIN_PAGE.getUrl())
-//                    .permitAll();
-//                    .and()
-//                    .logout().disable();
-//        }
-
-//        @Override
-//        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//            auth.authenticationProvider(daoAuthenticationProvider());
-//        }
 
     @Override
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
-
-
-//        @Bean
-//        protected DaoAuthenticationProvider daoAuthenticationProvider() {
-//            DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//            authenticationProvider.setPasswordEncoder(passwordEncoder);
-//            authenticationProvider.setUserDetailsService(detailsService);
-//            return authenticationProvider;
-//        }
 }

@@ -15,7 +15,11 @@ public enum Api {
     LOGIN_PAGE("/api/v1/view/login"),
     REGISTRATION_PAGE("/api/v1/view/registration"),
     MAIN_PAGE("/api/v1/view/main_page"),
-    ADD_PERSONAL_DATA_PAGE("/api/v1/view/add_personal_data_page");
+    ADD_PERSONAL_DATA_PAGE("/api/v1/view/add_personal_data_page"),
+
+    SOCKET_ENDPOINT ("/api/v1/socket/"),
+    SOCKET_INFO_ENDPOINT ("/api/v1/socket/");
+
 
     private final String url;
 

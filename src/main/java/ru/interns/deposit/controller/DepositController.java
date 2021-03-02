@@ -13,6 +13,9 @@ import ru.interns.deposit.service.OpenDepositCheckerService;
 import ru.interns.deposit.service.impl.PersonalDataService;
 import ru.interns.deposit.service.impl.UserService;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/user/deposit/")
 public class DepositController {
@@ -32,8 +35,11 @@ public class DepositController {
     @GetMapping("/open")
     public ResponseEntity<?> openDeposit(){
         final UserDTO userDTO = mapper.toUserDto(personalDataService.get());
+        userDTO.setUuid(UUID.randomUUID());
         System.out.println(userDTO);
         checkerService.checkAndOpen(userDTO);
+        ResponseEntity.ok(new ArrayList<>());
         return ResponseEntity.ok("test");
     }
+
 }
