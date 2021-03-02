@@ -2,6 +2,28 @@
 // либо отображаются либо нет.
 let personalDataEmpty = "personal_data_empty"
 let personalDataExist = "personal_data_exist"
+let save = "x-auth-token";
+
+function socketTest() {
+    console.log(sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
+    const socket = new SockJS(api.SOCKET_ENDPOINT);
+    stompClient = Stomp.over(socket);
+    stompClient.connect({'x-auth-token': "Bearer" + sessionStorage.getItem(keys.AUTHORIZATION_TOKEN)}, afterSocketConnect, onSocketError);
+}
+
+function onSocketError(){
+    console.log("Socket ERROR")
+}
+
+function afterSocketConnect(){
+    console.log("SUCCESSFULLY");
+    stompClient.subscribe(api.SOCKET_DEPOSIT_ENDPOINT, handleDepositOpeningInfo)
+}
+
+function handleDepositOpeningInfo() {
+console.log("ChtoToPrishlo")
+}
+
 
 function initMainPage() {
     getPersonalDataRequest();

@@ -25,11 +25,11 @@ public class OpenDepositCheckerServiceImpl implements OpenDepositCheckerService 
 
     @Override
     public OpenDepositCheckerStatus checkAndOpen(UserDTO userDTO) {
-        if(checkingRequestHandler.checkUser(userDTO).equals(CheckingStatus.SUCCESS)){
-            if(depositService.open(userDTO).equals(DepositServiceStatus.SUCCESS)){
-                return OpenDepositCheckerStatus.SUCCESS;
-            }
-        }
+//        if(checkingRequestHandler.checkUser(userDTO).equals(CheckingStatus.SUCCESS)){
+//            if(depositService.open(userDTO).equals(DepositServiceStatus.SUCCESS)){
+//                return OpenDepositCheckerStatus.SUCCESS;
+//            }
+//        }
         return OpenDepositCheckerStatus.CHECKING_FAILED;
     }
 }
