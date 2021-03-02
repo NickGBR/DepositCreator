@@ -1,7 +1,8 @@
 package ru.interns.deposit.external.mvd.service;
 
 import org.springframework.stereotype.Component;
+import ru.interns.deposit.dto.UserDTO;
 
-@Component
 public interface MVDService {
+    void checkUser(UserDTO userDTO);
 }

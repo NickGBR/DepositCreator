@@ -4,7 +4,6 @@ public enum CheckingStatus {
 
     SUCCESS(0),
     WAITING(1),
-    TIMEOUT_ERROR(2),
     CHECKING_FAILED(3);
 
     private final int status;
