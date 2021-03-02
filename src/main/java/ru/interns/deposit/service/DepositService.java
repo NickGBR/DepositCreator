@@ -6,5 +6,5 @@ import ru.interns.deposit.service.enums.DepositServiceStatus;
 
 public interface DepositService {
 
-    public DepositServiceStatus open(UserDTO userDTO);
+    DepositServiceStatus open(UserDTO userDTO);
 }

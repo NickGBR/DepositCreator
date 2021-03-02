@@ -2,18 +2,19 @@ package ru.interns.deposit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.interns.deposit.db.dao.PersonalData;
+import ru.interns.deposit.db.temprorary.MvdStatus;
+import ru.interns.deposit.db.temprorary.LoginInfoService;
 import ru.interns.deposit.dto.UserDTO;
+import ru.interns.deposit.external.enums.CheckingStatus;
+import ru.interns.deposit.external.mvd.dto.MvdResultCheckingDTO;
 import ru.interns.deposit.mapper.PersonalDataMapper;
 import ru.interns.deposit.service.OpenDepositCheckerService;
 import ru.interns.deposit.service.impl.PersonalDataService;
 import ru.interns.deposit.service.impl.UserService;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
@@ -24,22 +25,30 @@ public class DepositController {
     private final OpenDepositCheckerService checkerService;
     private final PersonalDataMapper mapper;
     private final PersonalDataService personalDataService;
+    private final UserService userService;
 
     @Autowired
-    public DepositController(OpenDepositCheckerService checkerService, PersonalDataMapper mapper, PersonalDataService personalDataService) {
+    public DepositController(OpenDepositCheckerService checkerService, PersonalDataMapper mapper, PersonalDataService personalDataService, UserService userService) {
         this.checkerService = checkerService;
         this.mapper = mapper;
         this.personalDataService = personalDataService;
+        this.userService = userService;
     }
 
     @GetMapping("/open")
     public ResponseEntity<?> openDeposit(){
-        final UserDTO userDTO = mapper.toUserDto(personalDataService.get());
-        userDTO.setUuid(UUID.randomUUID());
-        System.out.println(userDTO);
-        checkerService.checkAndOpen(userDTO);
-        ResponseEntity.ok(new ArrayList<>());
-        return ResponseEntity.ok("test");
-    }
+        MvdStatus.mvdCheckResult.put(userService.getCurrentUser().getLogin(),
+                MvdResultCheckingDTO.builder()
+                        .checkingStatus(CheckingStatus.WAITING)
+                        .build());
+        final UUID uuid = UUID.randomUUID();
+        LoginInfoService.data.put(uuid, userService.getCurrentUser().getLogin());
 
+        final UserDTO userDTO = mapper.toUserDto(personalDataService.get());
+        userDTO.setUuid(uuid);
+
+        checkerService.checkAndOpen(userDTO);
+
+        return ResponseEntity.ok("deposit/open");
+    }
 }
