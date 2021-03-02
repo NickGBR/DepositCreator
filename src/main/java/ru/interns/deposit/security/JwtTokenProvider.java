@@ -109,6 +109,9 @@ public class JwtTokenProvider {
      * @return должен вернуть null если токена нет.
      */
     public String resolveTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return null;
+        }
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(authorizationHeader))
                 .findFirst()
@@ -117,6 +120,6 @@ public class JwtTokenProvider {
     }
 
     public String resolveTokenFromHeader(HttpServletRequest request) {
-            return request.getHeader(authorizationHeader);
+        return request.getHeader(authorizationHeader);
     }
 }
