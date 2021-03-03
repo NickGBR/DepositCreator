@@ -2,6 +2,12 @@
 // либо отображаются либо нет.
 let personalDataEmpty = "personal_data_empty"
 let personalDataExist = "personal_data_exist"
+let depositOpeningSpinnerDiv;
+let personalDataCheckingSpinnerDiv;
+let personalDataCheckingSuccessDiv;
+let personalDataCheckingErrorDataDiv;
+let personalDataCheckingErrorTerroristDiv;
+let depositHolderTab;
 let save = "x-auth-token";
 
 function socketTest() {
@@ -27,6 +33,8 @@ console.log("ChtoToPrishlo")
 
 function initMainPage() {
     getPersonalDataRequest();
+    bindHtmlElements();
+    hideElement(depositOpeningSpinnerDiv);
 }
 
 function openDepositRequest(){
@@ -142,22 +150,29 @@ function setPersonalDataView(isPersonalDataExist) {
 }
 
 function activeDepositHolder(isActive){
-    let depositHolder = document.getElementById("deposit_holder_button");
     if(isActive) {
-        depositHolder.setAttribute("class", "nav-link")
+        depositHolderTab.setAttribute("class", "nav-link")
     }
     else {
-        depositHolder.setAttribute("class", "nav-link disabled")
+        depositHolderTab.setAttribute("class", "nav-link disabled")
     }
 }
 
-//Pavel test
-function sendJms() {
-    let request = new XMLHttpRequest();
-    activeDepositHolder(false);
-    // request.open("GET", "/test_jms", true);
-    // request.setRequestHeader("Content-Type", "application/json");
-    // request.setRequestHeader("Authorization", sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
-    // request.send();
-
+function hideElement(element){
+    element.style = "display:none"
 }
+
+function  showElement(element){
+    element.style = ""
+}
+
+function bindHtmlElements(){
+    depositHolderTab = document.getElementById("deposit_holder_button");
+    depositOpeningSpinnerDiv = document.getElementById("deposit_opening_spinner");
+    personalDataCheckingSpinnerDiv = document.getElementById("personal_data_spinner_div");;
+    personalDataCheckingSuccessDiv = document.getElementById("success_personal_data_checking_div");;
+    personalDataCheckingErrorDataDiv = document.getElementById("error_personal_data_checking_div");
+    personalDataCheckingErrorTerroristDiv = document.getElementById("terrorist_error_div");
+}
+
+

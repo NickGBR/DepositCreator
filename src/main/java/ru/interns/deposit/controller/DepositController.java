@@ -45,18 +45,18 @@ public class DepositController {
         // Mock для открытия депозит сервиса без проверок
         //depositService.open(mapper.toUserDto(personalDataService.get()));
 
-                MvdStatus.mvdCheckResult.put(userService.getCurrentUser().getLogin(),
-                        MvdResultCheckingDTO.builder()
-                                .checkingStatus(CheckingStatus.WAITING)
-                                .build());
-                final UUID uuid = UUID.randomUUID();
-                // Добавляем в бд, пару логин uuid для получения логина пользователя по uuid
-                LoginInfoService.data.put(uuid, userService.getCurrentUser().getLogin());
+        MvdStatus.mvdCheckResult.put(userService.getCurrentUser().getLogin(),
+                MvdResultCheckingDTO.builder()
+                        .checkingStatus(CheckingStatus.WAITING)
+                        .build());
+        final UUID uuid = UUID.randomUUID();
+        // Добавляем в бд, пару логин uuid для получения логина пользователя по uuid
+        LoginInfoService.data.put(uuid, userService.getCurrentUser().getLogin());
 
-                final UserDTO userDTO = mapper.toUserDto(personalDataService.get());
-                userDTO.setUuid(uuid);
+        final UserDTO userDTO = mapper.toUserDto(personalDataService.get());
+        userDTO.setUuid(uuid);
 
-                checkerService.checkAndOpen(userDTO);
+        checkerService.checkAndOpen(userDTO);
 
         return ResponseEntity.ok("deposit/open");
     }
