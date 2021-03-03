@@ -12,14 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
+import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.db.temprorary.LoginInfoService;
 import ru.interns.deposit.db.temprorary.MvdStatus;
 import ru.interns.deposit.dto.UserDTO;
+import ru.interns.deposit.external.deposit.DepositService;
+import ru.interns.deposit.external.deposit.dto.OpenDepositRequestDTO;
 import ru.interns.deposit.external.enums.CheckingStatus;
 import ru.interns.deposit.external.mvd.dto.MvdRequestDTO;
 import ru.interns.deposit.external.mvd.enums.CheckType;
 import ru.interns.deposit.external.mvd.enums.MvdErrors;
 import ru.interns.deposit.external.mvd.service.MVDService;
+import ru.interns.deposit.mapper.PersonalDataMapper;
+import ru.interns.deposit.service.impl.PersonalDataService;
+import ru.interns.deposit.service.impl.UserService;
 
 import javax.jms.JMSException;
 import java.util.ArrayList;
@@ -28,13 +34,25 @@ import java.util.UUID;
 
 @Component
 public class MVDServiceImpl implements MVDService {
-    private static final String DISINATION_NAME_LISTENER = "response";
-    private static final String DISINATION_NAME_CONSUMER = "request";
+    private static final String DESTINATION_NAME_LISTENER = "response";
+    private static final String DESTINATION_NAME_CONSUMER = "request";
+
+    private final JmsTemplate jmsTemplate;
+    private final DepositService depositService;
+    private final UserService userService;
+    private final PersonalDataService personalDataService;
+    private final PersonalDataMapper mapper;
 
     @Autowired
-    private JmsTemplate jmsTemplate;
+    public MVDServiceImpl(JmsTemplate jmsTemplate, DepositService depositService, UserService userService, PersonalDataService personalDataService, PersonalDataMapper personalDataMapper) {
+        this.jmsTemplate = jmsTemplate;
+        this.depositService = depositService;
+        this.userService = userService;
+        this.personalDataService = personalDataService;
+        this.mapper = personalDataMapper;
+    }
 
-    @JmsListener(destination = DISINATION_NAME_LISTENER)
+    @JmsListener(destination = DESTINATION_NAME_LISTENER)
     public void processMessages(Message message) throws JMSException, JSONException {
         String jsonBody = message.getStringProperty("JSONClient");
         JSONObject jsonObject = new JSONObject(jsonBody);
@@ -50,6 +68,8 @@ public class MVDServiceImpl implements MVDService {
 
         MvdStatus.mvdCheckResult.get(login).setMvdErrorsList(mvdErrors);
         MvdStatus.mvdCheckResult.get(login).setCheckingStatus(checkingStatus);
+
+        checkAndOpenDepositForUserByUuid(uuid);
     }
 
     @Override
@@ -71,6 +91,17 @@ public class MVDServiceImpl implements MVDService {
         message.setStringProperty("JSONClient", json);
         message.setJMSCorrelationID(userDTO.getUuid().toString());
 
-        jmsTemplate.convertAndSend(DISINATION_NAME_CONSUMER, message);
+        jmsTemplate.convertAndSend(DESTINATION_NAME_CONSUMER, message);
+    }
+
+    private void checkAndOpenDepositForUserByUuid(UUID uuid){
+        final PersonalData personalData =
+                personalDataService.getPersonalByForeignKey(userService.
+                        getUserByLogin(LoginInfoService.data.get(uuid)).getId());
+        final OpenDepositRequestDTO requestDTO = OpenDepositRequestDTO.builder()
+                .passportNumber(personalData.getPassportNumber())
+                .uuid(uuid)
+                .build();
+        depositService.checkAndOpen(requestDTO);
     }
 }
