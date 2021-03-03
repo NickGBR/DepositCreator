@@ -8,6 +8,8 @@ import ru.interns.deposit.dto.PersonalDataDTO;
 import ru.interns.deposit.mapper.PersonalDataMapper;
 import ru.interns.deposit.service.impl.PersonalDataService;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping("/api/v1/user/personal_data/")
@@ -25,6 +27,7 @@ public class PersonalDataController {
     public ResponseEntity<?> addData(@RequestBody PersonalDataDTO personalData) {
         return ResponseEntity.ok(personalDataService.add(personalData).getStatus());
     }
+
     @GetMapping("/get")
     public ResponseEntity<PersonalDataDTO> getPersonalData(){
         return ResponseEntity.ok(mapper
