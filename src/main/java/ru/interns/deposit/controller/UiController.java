@@ -2,21 +2,11 @@ package ru.interns.deposit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.interns.deposit.db.repositoiry.DepositRepository;
 import ru.interns.deposit.dto.RegistrationDTO;
 
 @RestController
 @RequestMapping("api/v1/")
 public class UiController {
-
-
-    private DepositRepository repository;
-
-    @Autowired
-    public UiController(DepositRepository repository) {
-        this.repository = repository;
-    }
-
 
     @PostMapping("user/register")
     public @ResponseBody Boolean create(@RequestBody RegistrationDTO registrationDTO){
