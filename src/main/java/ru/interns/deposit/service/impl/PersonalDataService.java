@@ -47,6 +47,11 @@ public class PersonalDataService {
         );
     }
 
+    //Test
+    public PersonalData getPersonalByForeignKey(Long foreignKey) {
+        return personalDataRepository.getByForeignKey(foreignKey);
+    }
+
     @Transactional
     public Boolean delete() {
         final PersonalData personalData = personalDataRepository
