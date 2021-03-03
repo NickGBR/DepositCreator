@@ -2,7 +2,6 @@ package ru.interns.deposit.external.mvd.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.apache.activemq.command.ActiveMQMessage;
 import org.apache.activemq.Message;
 import org.json.JSONObject;

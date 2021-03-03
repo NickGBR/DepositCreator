@@ -1,4 +1,4 @@
-package ru.interns.deposit.service;
+package ru.interns.deposit.external.deposit;
 
 import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.security.enums.Status;

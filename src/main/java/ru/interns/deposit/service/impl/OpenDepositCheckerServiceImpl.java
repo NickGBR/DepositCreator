@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.external.handler.CheckingRequestHandler;
 import ru.interns.deposit.external.mvd.service.MVDService;
-import ru.interns.deposit.service.DepositService;
+import ru.interns.deposit.external.deposit.DepositService;
 import ru.interns.deposit.service.OpenDepositCheckerService;
 import ru.interns.deposit.service.enums.OpenDepositCheckerStatus;
 
