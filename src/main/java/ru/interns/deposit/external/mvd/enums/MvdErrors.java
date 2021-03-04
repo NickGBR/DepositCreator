@@ -1,10 +1,7 @@
 package ru.interns.deposit.external.mvd.enums;
 
 public enum MvdErrors {
-    INCORRECT_NAME(1),
-    INCORRECT_ADDRESS(2),
-    INCORRECT_SURNAME(3),
-    INCORRECT_PASSPORT_NUMBER(4),
+    PERSONAL_DATA_DOESNT_EXIST(1),
     TERRORIST_ERROR(5),
     TIME_OUT_ERROR(6);
 
