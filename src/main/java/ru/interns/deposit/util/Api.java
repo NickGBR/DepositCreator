@@ -6,7 +6,10 @@ import lombok.Getter;
 public enum Api {
 
     OPEN_DEPOSIT_GET_REQUEST ("/api/v1/user/deposit/open"),
+    CHECK_DEPOSIT_STATUS_GET_REQUEST ("/api/v1/user/deposit/check_status"),
+    GET_DEPOSITS_GET_REQUEST ("/api/v1/user/deposit/get"),
     OPEN_DEPOSIT_MOCK_POST_REQUEST ("http://localhost:9999/api/v1/deposit/open"),
+    GET_DEPOSITS_MOCK_POST_REQUEST ("http://localhost:9999/api/v1/deposit/get"),
     PERSONAL_DATA_POST_REQUEST  ("/api/v1/user/personal_data/add"),
     PERSONAL_DATA_GET_REQUEST  ("/api/v1/user/personal_data/get"),
     PERSONAL_DATA_DELETE_REQUEST ("/api/v1/user/personal_data/delete"),

@@ -8,6 +8,15 @@ let personalDataCheckingSuccessDiv;
 let personalDataCheckingErrorDataDiv;
 let personalDataCheckingErrorTerroristDiv;
 let depositHolderTab;
+let depositsTableDiv;
+let depositsTableBody;
+let youDontHaveDepositsHolder;
+let addDepositButton;
+let depositsGettingErrorDiv;
+let depositsGettingSpinner;
+
+let depositOpeningCheckingTimeout = 10000;
+let depositOpeningCheckingIntervalId;
 let save = "x-auth-token";
 
 function socketTest() {
@@ -17,36 +26,83 @@ function socketTest() {
     stompClient.connect({'x-auth-token': "Bearer" + sessionStorage.getItem(keys.AUTHORIZATION_TOKEN)}, afterSocketConnect, onSocketError);
 }
 
-function onSocketError(){
-    console.log("Socket ERROR")
+function onSocketError() {
 }
 
-function afterSocketConnect(){
-    console.log("SUCCESSFULLY");
+function afterSocketConnect() {
     stompClient.subscribe(api.SOCKET_DEPOSIT_ENDPOINT, handleDepositOpeningInfo)
 }
 
 function handleDepositOpeningInfo() {
-console.log("ChtoToPrishlo")
 }
 
 
 function initMainPage() {
-    getPersonalDataRequest();
     bindHtmlElements();
-    hideElement(depositOpeningSpinnerDiv);
+    getPersonalDataRequest();
+    getDepositsRequest();
 }
 
-function openDepositRequest(){
+function openDepositRequest() {
+    makeNotActive(addDepositButton);
+    showElement(depositOpeningSpinnerDiv);
     let request = new XMLHttpRequest();
 
     request.open("GET", api.OPEN_DEPOSIT_GET_REQUEST, true);
     request.setRequestHeader("Authorization", sessionStorage.getItem(keys.AUTHORIZATION_TOKEN));
     request.send();
-    request.onreadystatechange = function (){
-        console.log(request.responseText);
+    request.onreadystatechange = function () {
+        if (request.readyState === 4) {
+            handleOpenDepositRequest(request)
+        }
     }
 }
+
+function handleOpenDepositRequest(request) {
+    if (request.status === 200) {
+        depositOpeningCheckingIntervalId = setInterval(checkDepositOpeningStatus, depositOpeningCheckingTimeout);
+// clearInterval(intervalId);
+    }
+}
+
+function checkDepositOpeningStatus() {
+    let request = new XMLHttpRequest();
+
+    request.open("GET", api.CHECK_DEPOSIT_STATUS_GET_REQUEST, true);
+    request.setRequestHeader("Authorization", sessionStorage.getItem(keys.AUTHORIZATION_TOKEN));
+    request.send();
+    request.onreadystatechange = function () {
+        if (request.readyState === 4) {
+            handleDepositOpeningStatus(request);
+        }
+    }
+}
+
+function handleDepositOpeningStatus(request) {
+    let response = JSON.parse(request.responseText);
+    let status = response.checkingStatus;
+    switch (status) {
+        case "WAITING":
+            console.log("WAITING")
+            console.log(response)
+            break;
+        case "SUCCESS":
+            console.log("SUCCESS")
+            break;
+        case "CHECKING_FAILED":
+            console.log("FAILED")
+            break;
+    }
+}
+
+function handleDepositOpeningError(json){
+    var i;
+    var mvdErrorsList = json.mvdErrorsList;
+for(i ; i < mvdErrorsList.length; i++){
+console.log(mvdErrorsList[i]);
+}
+}
+
 
 function getPersonalDataRequest() {
     let request = new XMLHttpRequest();
@@ -58,7 +114,7 @@ function getPersonalDataRequest() {
     request.send();
     request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
-            handlePersonalDataRequest(request);
+            return handlePersonalDataRequest(request);
         }
     }
 }
@@ -89,9 +145,11 @@ function handlePersonalDataRequest(request) {
             fillPersonalDataTable(request);
             activeDepositHolder(true);
             setPersonalDataView(true)
+            return true;
         } else {
             activeDepositHolder(false);
             setPersonalDataView(false);
+            return false;
         }
     }
 }
@@ -149,30 +207,133 @@ function setPersonalDataView(isPersonalDataExist) {
     }
 }
 
-function activeDepositHolder(isActive){
-    if(isActive) {
-        depositHolderTab.setAttribute("class", "nav-link")
+function getDepositsRequest() {
+    let request = new XMLHttpRequest();
+
+    request.open("GET", api.GET_DEPOSITS_GET_REQUEST, true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.setRequestHeader("Authorization", sessionStorage.getItem(keys.AUTHORIZATION_TOKEN));
+    request.send();
+    showElement(depositsGettingSpinner);
+    request.onreadystatechange = function () {
+        if (request.readyState === XMLHttpRequest.DONE) {
+            handleDepositsRequest(request);
+        }
     }
-    else {
+}
+
+function handleDepositsRequest(request) {
+    let json = JSON.parse(request.responseText);
+    if (request.status === 200) {
+        const status = json.status;
+        switch (status) {
+            case 'GOT_DEPOSITS_SUCCESSFULLY':
+                hideElement(youDontHaveDepositsHolder);
+                hideElement(depositsGettingSpinner);
+                hideElement(depositOpeningSpinnerDiv);
+                hideElement(depositsGettingErrorDiv)
+
+                showElement(addDepositButton);
+                showElement(depositsTableDiv);
+                showTableWithDeposits(json)
+
+                break;
+            case 'DEPOSITS_DONT_EXIST':
+                hideElement(depositsTableDiv)
+                hideElement(depositsGettingErrorDiv)
+                hideElement(depositsGettingSpinner);
+                hideElement(depositOpeningSpinnerDiv)
+
+                showElement(addDepositButton)
+                showElement(youDontHaveDepositsHolder)
+                break;
+            default:
+                showElement(depositsGettingErrorDiv);
+                hideElement(youDontHaveDepositsHolder);
+                hideElement(depositsTableDiv);
+                hideElement(depositOpeningSpinnerDiv);
+                hideElement(depositsGettingSpinner);
+                hideElement(addDepositButton);
+                console.log(`Sorry, there is no handle for ` + status + ' status.');
+                break;
+        }
+    }
+    if (request.status === 500) {
+        showElement(depositsGettingErrorDiv);
+        hideElement(youDontHaveDepositsHolder);
+        hideElement(depositsTableDiv);
+        hideElement(depositOpeningSpinnerDiv);
+        hideElement(depositsGettingSpinner);
+        hideElement(addDepositButton);
+    }
+}
+
+function showTableWithDeposits(json) {
+    depositsTableBody.innerText = "";
+    for (var i = 0; i < json.deposits.length; i++) {
+        var deposit = json.deposits[i];
+        addDepositsTableRow(deposit.depositNumber, deposit.depositAmount, 'RUB')
+    }
+    showElement(depositsTableDiv);
+}
+
+function addDepositsTableRow(depositNumber, depositAmount, currency) {
+    let depositNumberTh = document.createElement("td")
+    let depositNumberText = document.createTextNode(depositNumber);
+    depositNumberTh.appendChild(depositNumberText);
+
+    let depositAmountTh = document.createElement("td")
+    let depositAmountText = document.createTextNode(depositAmount);
+    depositAmountTh.appendChild(depositAmountText);
+
+    let currencyTh = document.createElement("td")
+    let currencyText = document.createTextNode(currency);
+    currencyTh.appendChild(currencyText);
+
+    let depositTr = document.createElement("tr")
+    depositTr.appendChild(depositNumberTh);
+    depositTr.appendChild(depositAmountTh);
+    depositTr.appendChild(currencyTh);
+    depositsTableBody.appendChild(depositTr);
+}
+
+function activeDepositHolder(isActive) {
+    if (isActive) {
+        depositHolderTab.setAttribute("class", "nav-link")
+    } else {
         depositHolderTab.setAttribute("class", "nav-link disabled")
     }
 }
 
-function hideElement(element){
+function hideElement(element) {
     element.style = "display:none"
 }
 
-function  showElement(element){
+function showElement(element) {
     element.style = ""
 }
 
-function bindHtmlElements(){
+function makeActive(element){
+element.disabled = false;
+}
+
+function makeNotActive(element){
+    element.disabled = true;
+}
+
+function bindHtmlElements() {
     depositHolderTab = document.getElementById("deposit_holder_button");
-    depositOpeningSpinnerDiv = document.getElementById("deposit_opening_spinner");
-    personalDataCheckingSpinnerDiv = document.getElementById("personal_data_spinner_div");;
-    personalDataCheckingSuccessDiv = document.getElementById("success_personal_data_checking_div");;
+    depositOpeningSpinnerDiv = document.getElementById("deposit_opening_spinner_div");
+    personalDataCheckingSpinnerDiv = document.getElementById("personal_data_spinner_div");
+    personalDataCheckingSuccessDiv = document.getElementById("success_personal_data_checking_div");
     personalDataCheckingErrorDataDiv = document.getElementById("error_personal_data_checking_div");
     personalDataCheckingErrorTerroristDiv = document.getElementById("terrorist_error_div");
+    depositsTableDiv = document.getElementById("deposits_table_div");
+    depositsTableBody = document.getElementById("deposits_table_body");
+    youDontHaveDepositsHolder = document.getElementById("you_dont_have_deposits_holder");
+    addDepositButton = document.getElementById("add_deposit_button");
+    depositsGettingErrorDiv = document.getElementById("deposits_getting_error_div");
+    depositsGettingSpinner = document.getElementById("deposits_getting_spinner");
 }
 
 

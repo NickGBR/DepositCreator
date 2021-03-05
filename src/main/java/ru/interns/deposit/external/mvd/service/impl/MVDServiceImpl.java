@@ -17,7 +17,7 @@ import ru.interns.deposit.db.temprorary.LoginInfoService;
 import ru.interns.deposit.db.temprorary.MvdStatus;
 import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.external.deposit.DepositService;
-import ru.interns.deposit.external.deposit.dto.OpenDepositRequestDTO;
+import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
 import ru.interns.deposit.external.enums.CheckingStatus;
 import ru.interns.deposit.external.mvd.dto.MvdRequestDTO;
 import ru.interns.deposit.external.mvd.enums.CheckType;
@@ -98,7 +98,7 @@ public class MVDServiceImpl implements MVDService {
         final PersonalData personalData =
                 personalDataService.getPersonalByForeignKey(userService.
                         getUserByLogin(LoginInfoService.data.get(uuid)).getId());
-        final OpenDepositRequestDTO requestDTO = OpenDepositRequestDTO.builder()
+        final DepositRequestDTO requestDTO = DepositRequestDTO.builder()
                 .passportNumber(personalData.getPassportNumber())
                 .uuid(uuid)
                 .build();
