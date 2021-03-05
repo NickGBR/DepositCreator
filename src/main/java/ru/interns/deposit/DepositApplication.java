@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @SpringBootApplication
+@EnableJms
 public class DepositApplication {
 
     public static void main(String[] args) {
