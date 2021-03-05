@@ -1,10 +1,12 @@
 const api = {
     OPEN_DEPOSIT_GET_REQUEST: "/api/v1/user/deposit/open",
+    GET_DEPOSITS_GET_REQUEST: "/api/v1/user/deposit/get",
     LOGIN_POST_REQUEST: "/api/v1/auth/login",
     PERSONAL_DATA_POST_REQUEST: "/api/v1/user/personal_data/add",
     PERSONAL_DATA_GET_REQUEST: "/api/v1/user/personal_data/get",
     PERSONAL_DATA_DELETE_REQUEST: "/api/v1/user/personal_data/delete",
     REGISTRATION_POST_REQUEST: "/api/v1/auth/registration",
+    CHECK_DEPOSIT_STATUS_GET_REQUEST: "/api/v1/user/deposit/check_status",
 
     REGISTRATION_PAGE: "/api/v1/view/registration",
     MAIN_PAGE: "/api/v1/view/main_page",
