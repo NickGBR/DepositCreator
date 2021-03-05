@@ -58,8 +58,8 @@ public class DepositController {
 
         //checkerService.checkAndOpen(userDTO);
         //Mock
-        depositService.checkAndOpen(DepositRequestDTO.builder().passportNumber(userDTO.getPassportNumber())
-        .uuid(userDTO.getUuid()).build());
+        //depositService.checkAndOpen(DepositRequestDTO.builder().passportNumber(userDTO.getPassportNumber())
+        //.uuid(userDTO.getUuid()).build());
         return ResponseEntity.ok("deposit/open");
     }
 
