@@ -1,5 +1,7 @@
 package ru.interns.deposit.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +33,8 @@ public class DepositController {
 
     private final DepositService depositService;
 
-    public DepositController(DepositCheckerService checkerService, PersonalDataMapper mapper,
+    @Autowired
+    public DepositController(@Qualifier("depositCheckerServiceMock")DepositCheckerService checkerService, PersonalDataMapper mapper,
                              PersonalDataService personalDataService, UserService userService,
                              DepositService depositService) {
         this.checkerService = checkerService;
@@ -55,11 +58,7 @@ public class DepositController {
 
         final UserDTO userDTO = mapper.toUserDto(personalDataService.get());
         userDTO.setUuid(uuid);
-
-        //checkerService.checkAndOpen(userDTO);
-        //Mock
-        //depositService.checkAndOpen(DepositRequestDTO.builder().passportNumber(userDTO.getPassportNumber())
-        //.uuid(userDTO.getUuid()).build());
+        checkerService.checkAndOpen(userDTO);
         return ResponseEntity.ok("deposit/open");
     }
 
