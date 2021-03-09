@@ -20,15 +20,18 @@ import ru.interns.deposit.external.deposit.dto.DepositDTO;
 import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
 import ru.interns.deposit.external.deposit.dto.DepositResponseDTO;
 import ru.interns.deposit.external.enums.RequestStatus;
+import ru.interns.deposit.external.mvd.enums.MvdErrors;
 import ru.interns.deposit.util.Api;
 import java.util.*;
+
 
 @Slf4j
 @Component
 public class DepositServiceImpl implements DepositService {
     public DepositResponseDTO checkAndOpen(DepositRequestDTO request) {
         System.out.println(LoginInfoService.data.get(request.getUuid()));
-        if (MvdStatus.mvdCheckResult.get(LoginInfoService.data.get(request.getUuid())).getMvdErrorsList() == null) {
+        List<MvdErrors> mvdErrorsList = MvdStatus.mvdCheckResult.get(LoginInfoService.data.get(request.getUuid())).getMvdErrorsList();
+        if (mvdErrorsList == null || mvdErrorsList.isEmpty()) {
             open(request);
         }
         return null;

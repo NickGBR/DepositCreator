@@ -34,7 +34,7 @@ public class DepositController {
     private final DepositService depositService;
 
     @Autowired
-    public DepositController(@Qualifier("depositCheckerServiceMock")DepositCheckerService checkerService, PersonalDataMapper mapper,
+    public DepositController(@Qualifier("depositCheckerServiceImpl")DepositCheckerService checkerService, PersonalDataMapper mapper,
                              PersonalDataService personalDataService, UserService userService,
                              DepositService depositService) {
         this.checkerService = checkerService;
