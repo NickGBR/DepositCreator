@@ -47,7 +47,7 @@ public class DepositController {
     @GetMapping("/open")
     public ResponseEntity<?> openDeposit() {
         // Mock для открытия депозит сервиса без проверок
-        //depositService.open(mapper.toUserDto(personalDataService.get()));
+        // depositService.open(mapper.toUserDto(personalDataService.get()));
         MvdStatus.mvdCheckResult.put(userService.getCurrentUser().getLogin(),
                 MvdResultCheckingDTO.builder()
                         .checkingStatus(CheckingStatus.WAITING)
