@@ -3,6 +3,7 @@ package ru.interns.deposit.external.mvd.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j;
 import org.apache.activemq.Message;
 import org.apache.activemq.command.ActiveMQMessage;
 import org.json.JSONArray;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.db.temprorary.LoginInfoService;
 import ru.interns.deposit.db.temprorary.MvdStatus;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Service
 public class MVDServiceImpl implements MVDService {
     private static final String DESTINATION_NAME_LISTENER = "response";
     private static final String DESTINATION_NAME_CONSUMER = "request";
@@ -62,19 +64,19 @@ public class MVDServiceImpl implements MVDService {
         if (correlationIdList.contains(uuid)) {
             final String login = LoginInfoService.data.get(uuid);
 
-            JSONArray errorsList = jsonObject.getJSONArray("mvdErrorsList");
-            CheckingStatus checkingStatus = jsonObject.getEnum(CheckingStatus.class, "checkingStatus");
+            final JSONArray errorsList = jsonObject.getJSONArray("mvdErrorsList");
+            final CheckingStatus checkingStatus = jsonObject.getEnum(CheckingStatus.class, "checkingStatus");
 
             List<MvdErrors> mvdErrors = new ArrayList<>();
             errorsList.forEach(x -> mvdErrors.add(MvdErrors.valueOf(x.toString())));
 
-            MvdResultCheckingDTO mvdResultCheckingDTO = MvdStatus.mvdCheckResult.get(login);
+            final MvdResultCheckingDTO mvdResultCheckingDTO = MvdStatus.mvdCheckResult.get(login);
             if (mvdResultCheckingDTO != null) {
                 mvdResultCheckingDTO.setMvdErrorsList(mvdErrors);
                 mvdResultCheckingDTO.setCheckingStatus(checkingStatus);
             }
 
-            checkAndOpenDepositForUserByUuid(uuid);
+            checkAndOpenDepositForUserByUuid(uuid, login);
             correlationIdList.remove(uuid);
         }
     }
@@ -82,7 +84,7 @@ public class MVDServiceImpl implements MVDService {
     @Override
     @SneakyThrows
     public void checkUser(UserDTO userDTO) {
-        MvdRequestDTO mvdRequestDTO = MvdRequestDTO.builder()
+         final MvdRequestDTO mvdRequestDTO = MvdRequestDTO.builder()
                 .checkTypeCode(CheckType.DEFAULT_CHECK_ALL.getCode())
                 .dateOfBirthday(userDTO.getDateOfBirthday())
                 .kladrAddress(userDTO.getKladrAddress())
@@ -92,9 +94,9 @@ public class MVDServiceImpl implements MVDService {
                 .build();
 
         final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(mvdRequestDTO);
+        final String json = ow.writeValueAsString(mvdRequestDTO);
 
-        Message message = new ActiveMQMessage();
+        final Message message = new ActiveMQMessage();
         message.setStringProperty("JSONClient", json);
         message.setJMSCorrelationID(userDTO.getUuid().toString());
 
@@ -103,10 +105,10 @@ public class MVDServiceImpl implements MVDService {
         correlationIdList.add(userDTO.getUuid());
     }
 
-    private void checkAndOpenDepositForUserByUuid(UUID uuid) {
-        final PersonalData personalData =
-                personalDataService.getPersonalByForeignKey(userService.
-                        getUserByLogin(LoginInfoService.data.get(uuid)).getId());
+    private void checkAndOpenDepositForUserByUuid(UUID uuid, String login) {
+        final PersonalData personalData = personalDataService.getPersonalByForeignKey(userService.
+                        getUserByLogin(login).getId());
+
         final DepositRequestDTO requestDTO = DepositRequestDTO.builder()
                 .passportNumber(personalData.getPassportNumber())
                 .uuid(uuid)
