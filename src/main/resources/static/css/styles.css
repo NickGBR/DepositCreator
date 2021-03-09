@@ -67,3 +67,13 @@ div{
     color: #666;
 }
 
+.my-custom-scrollbar {
+    position: relative;
+    width: content-box;
+    height: 300px;
+    overflow: auto;
+}
+.table-wrapper-scroll-y {
+    display: block;
+}
+
