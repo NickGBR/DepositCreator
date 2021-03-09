@@ -10,7 +10,5 @@ public class DepositApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DepositApplication.class, args);
-
     }
-
 }

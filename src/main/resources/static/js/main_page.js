@@ -14,8 +14,9 @@ let youDontHaveDepositsHolder;
 let addDepositButton;
 let depositsGettingErrorDiv;
 let depositsGettingSpinner;
+let mvdCheckingTimeoutErrorDiv;
 
-let depositOpeningCheckingTimeout = 10000;
+let depositOpeningCheckingTimeout = 1000;
 let depositOpeningCheckingIntervalId;
 let save = "x-auth-token";
 
@@ -44,6 +45,7 @@ function initMainPage() {
 }
 
 function openDepositRequest() {
+    hideErrors();
     makeNotActive(addDepositButton);
     showElement(depositOpeningSpinnerDiv);
     let request = new XMLHttpRequest();
@@ -61,7 +63,7 @@ function openDepositRequest() {
 function handleOpenDepositRequest(request) {
     if (request.status === 200) {
         depositOpeningCheckingIntervalId = setInterval(checkDepositOpeningStatus, depositOpeningCheckingTimeout);
-// clearInterval(intervalId);
+
     }
 }
 
@@ -88,19 +90,41 @@ function handleDepositOpeningStatus(request) {
             break;
         case "SUCCESS":
             console.log("SUCCESS")
+            // Делаем кнопку открытия депозита активной
+            makeActive(addDepositButton);
+            // Запрашиваем депозиты
+            getDepositsRequest();
+            // Прекразщаем переодический запрос статуса открытия счета
+            clearInterval(depositOpeningCheckingIntervalId);
             break;
         case "CHECKING_FAILED":
+            handleDepositOpeningError(response)
+            makeActive(addDepositButton);
+            clearInterval(depositOpeningCheckingIntervalId);
             console.log("FAILED")
             break;
     }
 }
 
-function handleDepositOpeningError(json){
-    var i;
-    var mvdErrorsList = json.mvdErrorsList;
-for(i ; i < mvdErrorsList.length; i++){
-console.log(mvdErrorsList[i]);
-}
+function handleDepositOpeningError(json) {
+    let i = 0;
+    let mvdErrorsList = json.mvdErrorsList;
+    console.log(mvdErrorsList);
+
+    for (i; i < mvdErrorsList.length; i++) {
+        if (mvdErrorsList[i] === "TERRORIST_ERROR") {
+            showElement(personalDataCheckingErrorTerroristDiv);
+            hideElement(depositOpeningSpinnerDiv);
+        }
+        if (mvdErrorsList[i] === "PERSONAL_DATA_DOESNT_EXIST") {
+            showElement(personalDataCheckingErrorDataDiv);
+            hideElement(depositOpeningSpinnerDiv);
+        }
+        if (mvdErrorsList[i] === "TIME_OUT_ERROR") {
+            showElement(mvdCheckingTimeoutErrorDiv);
+            hideElement(depositOpeningSpinnerDiv);
+        }
+    }
 }
 
 
@@ -313,12 +337,18 @@ function showElement(element) {
     element.style = ""
 }
 
-function makeActive(element){
-element.disabled = false;
+function makeActive(element) {
+    element.disabled = false;
 }
 
-function makeNotActive(element){
+function makeNotActive(element) {
     element.disabled = true;
+}
+
+function hideErrors(){
+    hideElement(personalDataCheckingErrorDataDiv);
+    hideElement(personalDataCheckingErrorTerroristDiv);
+    hideElement(mvdCheckingTimeoutErrorDiv);
 }
 
 function bindHtmlElements() {
@@ -334,6 +364,7 @@ function bindHtmlElements() {
     addDepositButton = document.getElementById("add_deposit_button");
     depositsGettingErrorDiv = document.getElementById("deposits_getting_error_div");
     depositsGettingSpinner = document.getElementById("deposits_getting_spinner");
+    mvdCheckingTimeoutErrorDiv = document.getElementById("mvd_checking_timeout_error_div");
 }
 
 
