@@ -7,7 +7,7 @@ import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.db.repositoiry.PersonalDataRepository;
 import ru.interns.deposit.dto.PersonalDataDTO;
 import ru.interns.deposit.mapper.PersonalDataMapper;
-import ru.interns.deposit.service.enums.PersonalDataAddingStatus;
+import ru.interns.deposit.service.enums.Errors;
 
 import java.util.*;
 
@@ -16,27 +16,29 @@ public class PersonalDataService {
     private PersonalDataRepository personalDataRepository;
     private PersonalDataMapper personalDataMapper;
     private UserService userService;
+    private ValidationService validationService;
 
     @Autowired
-    public PersonalDataService(PersonalDataRepository personalDataRepository,
-                               PersonalDataMapper personalDataMapper,
-                               UserService userService) {
+    public PersonalDataService(PersonalDataRepository personalDataRepository, PersonalDataMapper personalDataMapper,
+                               UserService userService, ValidationService validationService) {
         this.personalDataRepository = personalDataRepository;
         this.personalDataMapper = personalDataMapper;
         this.userService = userService;
+        this.validationService = validationService;
     }
 
-
-    public PersonalDataAddingStatus add(PersonalDataDTO personalDataDTO) {
+    public List<Errors> add(PersonalDataDTO personalDataDTO) {
+        final List<Errors> errors = new ArrayList<>();
         final PersonalData personalData = personalDataMapper.toEntity(personalDataDTO);
         if (personalDataRepository.existsByForeignKey(userService
                 .getCurrentUser()
                 .getId())) {
-            return PersonalDataAddingStatus.DATA_ALREADY_EXIST;
+            errors.add(Errors.PERSONAL_DATA_ALREADY_EXIST);
+            return errors;
         } else {
             personalData.setForeignKey(userService.getCurrentUser().getId());
             personalDataRepository.save(personalData);
-            return PersonalDataAddingStatus.ADDED_SUCCESSFULLY;
+            return null;
         }
     }
 
