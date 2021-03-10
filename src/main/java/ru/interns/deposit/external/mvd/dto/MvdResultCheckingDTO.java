@@ -13,5 +13,4 @@ import java.util.*;
 public class MvdResultCheckingDTO {
     private CheckingStatus checkingStatus;
     private List<MvdErrors> mvdErrorsList;
-
 }

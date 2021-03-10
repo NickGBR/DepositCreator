@@ -25,15 +25,16 @@ function sendRegistrationRequest(personalDataDto, callback) {
 
 
 function getCreatingStatus(data) {
-    if(data === 1){
+    console.log(data + "fdsfsfdsf")
+    if(data.status === 0){
         alert("Данные успешно добавлены.")
         changePage(api.MAIN_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
     }
-    else if(data === 0){
+    else if(data.status === 1){
         alert("Вы уже добавили персональные данные, удалите старные данные и повторите попытку!")
         changePage(api.MAIN_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))
     }
-    else (alert("Проблемы на стороне сервена"))
+    else (alert("Проблемы на стороне сервера"))
 }
 
 function getUserData() {
