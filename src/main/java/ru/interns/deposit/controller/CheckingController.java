@@ -4,9 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.interns.deposit.db.temprorary.MvdStatus;
-import ru.interns.deposit.external.enums.CheckingStatus;
-import ru.interns.deposit.external.mvd.dto.MvdResultCheckingDTO;
+import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
+import ru.interns.deposit.external.enums.Status;
+import ru.interns.deposit.external.mvd.dto.CheckingInfo;
 import ru.interns.deposit.service.impl.UserService;
 
 @RestController
@@ -21,13 +21,13 @@ public class CheckingController {
     }
 
     @GetMapping("/mvd_check")
-    ResponseEntity<CheckingStatus> getMvdCheckingResult(){
+    ResponseEntity<Status> getMvdCheckingResult(){
 
-        final MvdResultCheckingDTO mvdResultCheckingDTO
-                = MvdStatus.mvdCheckResult.get(userService.getCurrentUser().getLogin());
+        final CheckingInfo checkingInfo
+                = UserCheckingRequestsInfo.result.get(userService.getCurrentUser().getLogin());
 
-        if (mvdResultCheckingDTO.getCheckingStatus().equals(CheckingStatus.WAITING)){
-            return ResponseEntity.ok(CheckingStatus.WAITING);
+        if (checkingInfo.getServiceStatus().equals(Status.WAITING)){
+            return ResponseEntity.ok(Status.WAITING);
         }
         return null;
     }

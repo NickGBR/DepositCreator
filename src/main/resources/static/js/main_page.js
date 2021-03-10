@@ -16,7 +16,7 @@ let depositsGettingErrorDiv;
 let depositsGettingSpinner;
 let mvdCheckingTimeoutErrorDiv;
 
-let depositOpeningCheckingTimeout = 1000;
+let depositOpeningCheckingTimeout = 5000;
 let depositOpeningCheckingIntervalId;
 let save = "x-auth-token";
 
@@ -81,14 +81,15 @@ function checkDepositOpeningStatus() {
 }
 
 function handleDepositOpeningStatus(request) {
+    console.log(request.responseText)
     let response = JSON.parse(request.responseText);
-    let status = response.checkingStatus;
+    let status = response.status;
     switch (status) {
-        case "WAITING":
+        case statuses.WAITING:
             console.log("WAITING")
             console.log(response)
             break;
-        case "SUCCESS":
+        case statuses.SUCCESS:
             console.log("SUCCESS")
             // Делаем кнопку открытия депозита активной
             makeActive(addDepositButton);
@@ -97,7 +98,7 @@ function handleDepositOpeningStatus(request) {
             // Прекразщаем переодический запрос статуса открытия счета
             clearInterval(depositOpeningCheckingIntervalId);
             break;
-        case "CHECKING_FAILED":
+        case statuses.ERROR:
             handleDepositOpeningError(response)
             makeActive(addDepositButton);
             clearInterval(depositOpeningCheckingIntervalId);
@@ -108,19 +109,19 @@ function handleDepositOpeningStatus(request) {
 
 function handleDepositOpeningError(json) {
     let i = 0;
-    let mvdErrorsList = json.mvdErrorsList;
+    let mvdErrorsList = json.errors;
     console.log(mvdErrorsList);
 
     for (i; i < mvdErrorsList.length; i++) {
-        if (mvdErrorsList[i] === "TERRORIST_ERROR") {
+        if (mvdErrorsList[i] === "MVD_TERRORIST_ERROR") {
             showElement(personalDataCheckingErrorTerroristDiv);
             hideElement(depositOpeningSpinnerDiv);
         }
-        if (mvdErrorsList[i] === "PERSONAL_DATA_DOESNT_EXIST") {
+        if (mvdErrorsList[i] === "MVD_PERSONAL_DATA_DOESNT_EXIST") {
             showElement(personalDataCheckingErrorDataDiv);
             hideElement(depositOpeningSpinnerDiv);
         }
-        if (mvdErrorsList[i] === "TIME_OUT_ERROR") {
+        if (mvdErrorsList[i] === "MVD_TIME_OUT_ERROR") {
             showElement(mvdCheckingTimeoutErrorDiv);
             hideElement(depositOpeningSpinnerDiv);
         }
