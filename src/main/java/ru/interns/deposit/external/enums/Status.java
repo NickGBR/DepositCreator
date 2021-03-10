@@ -1,6 +1,6 @@
 package ru.interns.deposit.external.enums;
 
-public enum CheckingStatus {
+public enum Status {
 
     SUCCESS(0),
     WAITING(1),
@@ -8,7 +8,7 @@ public enum CheckingStatus {
 
     private final int status;
 
-    CheckingStatus(int status) {
+    Status(int status) {
         this.status = status;
     }
 

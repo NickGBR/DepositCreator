@@ -1,8 +1,8 @@
 package ru.interns.deposit.external.handler;
 
 import ru.interns.deposit.dto.UserDTO;
-import ru.interns.deposit.external.enums.CheckingStatus;
+import ru.interns.deposit.external.enums.Status;
 
 public interface CheckingRequestHandler {
-    CheckingStatus checkUser(UserDTO userDTO);
+    Status checkUser(UserDTO userDTO);
 }
