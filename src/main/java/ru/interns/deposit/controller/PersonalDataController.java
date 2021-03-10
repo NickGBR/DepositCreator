@@ -3,12 +3,14 @@ package ru.interns.deposit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.dto.PersonalDataDTO;
+import ru.interns.deposit.dto.ResponseDTO;
 import ru.interns.deposit.mapper.PersonalDataMapper;
+import ru.interns.deposit.service.enums.Errors;
+import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.service.impl.PersonalDataService;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 
 @RestController
@@ -24,19 +26,24 @@ public class PersonalDataController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addData(@RequestBody PersonalDataDTO personalData) {
-        return ResponseEntity.ok(personalDataService.add(personalData).getStatus());
+    public ResponseEntity<ResponseDTO> addData(@RequestBody PersonalDataDTO personalData) {
+        final List<Errors> errors = personalDataService.add(personalData);
+        if (errors == null)
+            return ResponseEntity.ok(ResponseDTO.builder().status(Status.SUCCESS.getStatus()).build());
+        else return ResponseEntity.ok(ResponseDTO.builder().status(Status.ERROR.getStatus())
+                .errors(errors)
+                .build());
     }
 
     @GetMapping("/get")
-    public ResponseEntity<PersonalDataDTO> getPersonalData(){
+    public ResponseEntity<PersonalDataDTO> getPersonalData() {
         return ResponseEntity.ok(mapper
                 .toDto(personalDataService.get())
         );
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deletePersonalData(){
+    public ResponseEntity<Boolean> deletePersonalData() {
         return ResponseEntity.ok(personalDataService.delete());
     }
 }

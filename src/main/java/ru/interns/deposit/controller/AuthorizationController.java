@@ -9,12 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import ru.interns.deposit.db.dao.User;
 import ru.interns.deposit.dto.AuthenticationRequestDTO;
 import ru.interns.deposit.dto.RegistrationDTO;
+import ru.interns.deposit.dto.ResponseDTO;
+import ru.interns.deposit.service.enums.Errors;
+
+import java.util.*;
+
+import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.service.impl.SecurityService;
 import ru.interns.deposit.service.impl.UserService;
+import ru.interns.deposit.service.impl.ValidationService;
 import ru.interns.deposit.util.ClientErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("api/v1/auth/")
@@ -22,26 +30,36 @@ public class AuthorizationController {
 
     private final UserService userService;
     private final SecurityService securityService;
+    private final ValidationService validationService;
 
     @Autowired
-    public AuthorizationController(UserService userService, SecurityService securityService) {
+    public AuthorizationController(UserService userService, SecurityService securityService, ValidationService validationService) {
         this.userService = userService;
         this.securityService = securityService;
+        this.validationService = validationService;
     }
-
-
 
 
     @PostMapping("/registration")
     public @ResponseBody
-    ResponseEntity<?> create(@RequestBody RegistrationDTO registrationDTO) {
-        if (userService.existByLogin(registrationDTO.getLogin())) {
-            return new ResponseEntity<>(ClientErrorCode.USER_ALREADY_EXISTS, HttpStatus.CONFLICT);
+    ResponseEntity<ResponseDTO> create(@RequestBody RegistrationDTO registrationDTO) {
+        List<Errors> errors = new ArrayList<>();
+        userService.existByLogin(registrationDTO.getLogin(), errors);
+        validationService.validatePassword(registrationDTO.getPassword(), errors);
+        validationService.validateUserName(registrationDTO.getLogin(), errors);
+        if (errors.size() != 0) {
+            return ResponseEntity.ok(ResponseDTO.builder()
+                    .status(Status.ERROR.getStatus())
+                    .errors(errors)
+                    .build());
         } else {
             userService.addUser(registrationDTO);
-            return ResponseEntity.ok(true);
+            return ResponseEntity.ok(ResponseDTO.builder()
+                    .status(Status.SUCCESS.getStatus())
+                    .build());
         }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTO request) {

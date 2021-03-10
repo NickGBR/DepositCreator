@@ -12,9 +12,10 @@ import ru.interns.deposit.db.dao.User;
 import ru.interns.deposit.db.repositoiry.UsersRepository;
 import ru.interns.deposit.dto.AuthenticationRequestDTO;
 import ru.interns.deposit.dto.RegistrationDTO;
-import ru.interns.deposit.security.JwtTokenProvider;
+import java.util.*;
 import ru.interns.deposit.security.enums.Role;
 import ru.interns.deposit.security.enums.Status;
+import ru.interns.deposit.service.enums.Errors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,8 +35,8 @@ public class UserService {
     }
 
 
-    public boolean existByLogin(String login) {
-        return usersRepository.existsByLogin(login);
+    public void existByLogin(String login, List<Errors> errors) {
+        if(usersRepository.existsByLogin(login)) errors.add(Errors.USER_LOGIN_ALREADY_EXIST);
     }
 
     public void addUser(RegistrationDTO registration) {

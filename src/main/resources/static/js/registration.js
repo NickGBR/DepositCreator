@@ -1,10 +1,21 @@
 let input_postfix = "_input";
 let div_postfix = "_div"
 
+let passwordDiv;
+let passwordCheckDiv;
+let loginDiv;
+let passwordInput;
+let passwordCheckInput;
+let loginInput;
+
 function create() {
     let registrationDTO;
     registrationDTO = JSON.stringify(getAuthenticationData());
     if (checkInputs()) sendRegistrationRequest(registrationDTO, getCreatingStatus);
+}
+
+function initRegistrationPage() {
+    bindHtmlElements();
 }
 
 function sendRegistrationRequest(registrationDTO, callback) {
@@ -15,22 +26,68 @@ function sendRegistrationRequest(registrationDTO, callback) {
     request.send(registrationDTO);
     request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
-            let response = JSON.parse(request.responseText);
-            callback(response);
+            let json = JSON.parse(request.responseText);
+            callback(json);
         }
     }
 }
 
 
-function getCreatingStatus(data) {
-    if(data == true){
-        alert("Регистрация прошла успешно")
-        callLoginPage();
+function getCreatingStatus(jsonData) {
+    console.log(jsonData)
+
+    switch (jsonData.status) {
+        case 0:
+            alert("Регистрация прошла успешно")
+            callLoginPage();
+            break;
+        case 1:
+            handleErrors(jsonData.errors);
+            break;
+        default:
+            alert("Произошла неизвестная ошибка, обратитесь к разработчику.")
+            break;
     }
-    else {
-        document.getElementById("login_div").className = "error"
-        alert("Пользователь с таким логином уже существует")
+}
+
+function handleErrors(errors) {
+    clearErrors();
+    for (let i = 0; i < errors.length; i++) {
+        handleError(errors[i])
     }
+}
+
+function handleError(error) {
+    switch (error) {
+        case ("INVALID_USER_NAME"):
+            alert("Имя пользователя должно содержать от 3 до 20 символов!")
+            setErrorView(loginDiv);
+            break;
+        case ("INVALID_PASSWORD"):
+            alert("Пароль должен содержать от 8 до 20 символов!")
+            setErrorView(passwordCheckDiv);
+            setErrorView(passwordDiv);
+            break;
+        case ("USER_LOGIN_ALREADY_EXIST"):
+            alert("Логин занят!")
+            setErrorView(loginDiv);
+            break;
+    }
+}
+
+function setErrorView(element) {
+    element.className = "error";
+}
+
+function setSuccessView(element) {
+    element.className = "success"
+}
+
+function clearErrors() {
+    setSuccessView(loginDiv);
+    setSuccessView(passwordDiv);
+    setSuccessView(passwordCheckDiv);
+
 }
 
 function getAuthenticationData() {
@@ -43,49 +100,53 @@ function getAuthenticationData() {
 }
 
 
-function checkInputs() {
-    let result = true;
-    if (!checkInput("login")) result = false;
-    if (!checkPassword()) result = false;
-    return result;
-}
-
-function checkInput(id) {
-    let input = document.getElementById(id
-        + input_postfix);
-    if (input != null) {
-        if (input.value != "") {
-            document.getElementById(id + div_postfix).className = "success"
-            return true;
-        } else {
-            console.log("Ошибка в блоке " + id + div_postfix)
-            document.getElementById(id + div_postfix).className = "error"
-            return false;
-        }
-    } else console.log("Ошибка внутренней логики, html эллемент \"" + id + input_postfix + "\" не обнаружен")
-}
-
 function checkPassword() {
-    let password = document.getElementById("password_input").value;
-    let passwordCheck = document.getElementById("password_check_input").value;
+    let password = passwordInput.value;
+    let passwordCheck = passwordCheckInput.value;
+
     if (!(password == passwordCheck)) {
-        document.getElementById("password_check_div").className = "error";
-        document.getElementById("password_div").className = "error";
+        setErrorView(passwordDiv);
+        setErrorView(passwordCheckDiv);
         alert("Пароли должны совпадать!");
         return false;
     } else if (password == "" || passwordCheck == "") {
         alert("Пароль не должен быть пустым.");
-        document.getElementById("password_check_div").className = "error";
-        document.getElementById("password_div").className = "error";
+        setErrorView(passwordDiv);
+        setErrorView(passwordCheckDiv);
         return false;
     }
-    document.getElementById("password_check_div").className = "success";
-    document.getElementById("password_div").className = "success";
     return true;
 }
 
-function callLoginPage(){
+function checkLogin() {
+    bindHtmlElements();
+    let loginText = loginInput.value;
+    console.log(loginText);
+    if (loginText === "") {
+        setErrorView(loginDiv);
+        alert("Заполните имя пользователя")
+        return false;
+    }
+    return true;
+}
+
+function checkInputs() {
+    clearErrors();
+    return (checkPassword() & checkLogin());
+}
+
+function callLoginPage() {
     window.location.href = api.LOGIN_PAGE;
+}
+
+function bindHtmlElements() {
+
+    passwordDiv = document.getElementById("password_div");
+    passwordCheckDiv = document.getElementById("password_check_div");
+    loginDiv = document.getElementById("login_div");
+    passwordInput = document.getElementById("password_input");
+    passwordCheckInput = document.getElementById("password_check_input");
+    loginInput = document.getElementById("login_input");
 }
 
 

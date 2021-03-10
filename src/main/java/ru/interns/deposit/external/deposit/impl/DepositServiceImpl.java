@@ -14,29 +14,27 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import ru.interns.deposit.db.temprorary.LoginInfoService;
-import ru.interns.deposit.db.temprorary.MvdStatus;
+import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
+import ru.interns.deposit.enums.Services;
 import ru.interns.deposit.external.deposit.DepositService;
 import ru.interns.deposit.external.deposit.dto.DepositDTO;
 import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
 import ru.interns.deposit.external.deposit.dto.DepositResponseDTO;
 import ru.interns.deposit.external.enums.RequestStatus;
-import ru.interns.deposit.external.mvd.enums.MvdErrors;
+import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.util.Api;
 import java.util.*;
-
 
 @Slf4j
 @Component
 public class DepositServiceImpl implements DepositService {
     public DepositResponseDTO checkAndOpen(DepositRequestDTO request) {
-        System.out.println(LoginInfoService.data.get(request.getUuid()));
-        List<MvdErrors> mvdErrorsList = MvdStatus.mvdCheckResult.get(LoginInfoService.data.get(request.getUuid())).getMvdErrorsList();
-        if (mvdErrorsList == null || mvdErrorsList.isEmpty()) {
-            open(request);
-        }
+
+        if (checkSuccess(UserCheckingRequestsInfo
+                .result.get(LoginInfoService
+                        .data.get(request.getUuid())).getServiceStatus())) open(request);
         return null;
     }
-
 
     @Override
     public DepositResponseDTO getDeposits(Long passportNumber) {
@@ -79,7 +77,7 @@ public class DepositServiceImpl implements DepositService {
         return handleResponse(response);
     }
 
-    private DepositResponseDTO handleResponse(JSONObject response){
+    private DepositResponseDTO handleResponse(JSONObject response) {
         String status = response.getString("status");
         switch (status) {
             case ("ERROR"):
@@ -123,5 +121,14 @@ public class DepositServiceImpl implements DepositService {
         }
         depositResponseDTO.setDeposits(depositDTOS);
         return depositResponseDTO;
+    }
+
+    private boolean checkSuccess(Map<Services, Status> statusMap) {
+        for (Map.Entry<Services, Status> pair : statusMap.entrySet()) {
+            if (pair.getValue() != Status.SUCCESS) {
+                return false;
+            }
+        }
+        return true;
     }
 }
