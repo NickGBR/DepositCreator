@@ -51,7 +51,7 @@ public class DepositController {
         // Mock для открытия депозит сервиса без проверок
         // depositService.open(mapper.toUserDto(personalDataService.get()));
         Map<Services, Status> servicesInfo = new HashMap<>();
-        servicesInfo.put(Services.CHEATER, Status.SUCCESS);
+        servicesInfo.put(Services.CHEATER, Status.WAITING);
         servicesInfo.put(Services.MVD, Status.WAITING);
         final List<Errors> errors = new ArrayList<>();
 

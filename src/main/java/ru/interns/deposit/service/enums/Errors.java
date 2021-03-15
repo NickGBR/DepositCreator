@@ -17,6 +17,8 @@ public enum Errors {
 
     USER_AGE_IS_UNDER_14 (18),
 
+    CHEATER_DETECTED(20),
+
     INVALID_LOGIN(2),
     INVALID_PASSWORD(3),
     USER_LOGIN_ALREADY_EXIST(5),

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.external.cheater.service.CheaterService;
-import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.external.handler.CheckingRequestHandler;
 import ru.interns.deposit.external.mvd.service.MVDService;
+import ru.interns.deposit.service.enums.Status;
 
 @Component
 public class CheckingRequestHandlerImpl implements CheckingRequestHandler {

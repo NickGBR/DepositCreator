@@ -1,5 +1,6 @@
 package ru.interns.deposit.external.cheater.service.impl;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
@@ -10,11 +11,12 @@ import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
 import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.enums.Services;
 import ru.interns.deposit.external.cheater.service.CheaterService;
-import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.external.mvd.dto.CheckingInfo;
 import ru.interns.deposit.service.enums.Errors;
+import ru.interns.deposit.service.enums.Status;
 
 @Service
+@Primary
 public class CheaterServiceClient extends WebServiceGatewaySupport implements CheaterService {
 
 
