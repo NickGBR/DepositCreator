@@ -6,6 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserCheckingRequestsInfo {
-    // В это место кладем ответ от мвд сервиса. key - userLogin
+    // В это место кладем ответ от сервиса. key - userLogin
     public static Map<String , CheckingInfo> result = new HashMap<>();
 }

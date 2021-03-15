@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
-import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.external.mvd.dto.CheckingInfo;
+import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.service.impl.UserService;
 
 @RestController

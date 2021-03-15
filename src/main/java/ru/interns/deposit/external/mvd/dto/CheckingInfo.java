@@ -2,12 +2,10 @@ package ru.interns.deposit.external.mvd.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import ru.interns.deposit.dto.ResponseDTO;
 import ru.interns.deposit.enums.Services;
-import ru.interns.deposit.external.enums.Status;
-import ru.interns.deposit.external.mvd.enums.MvdErrors;
 import ru.interns.deposit.service.enums.Errors;
+import ru.interns.deposit.service.enums.Status;
 
 import java.util.*;
 

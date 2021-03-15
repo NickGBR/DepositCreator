@@ -30,7 +30,7 @@ public class PersonalDataController {
         final List<Errors> errors = personalDataService.add(personalData);
         if (errors == null)
             return ResponseEntity.ok(ResponseDTO.builder().status(Status.SUCCESS.getStatus()).build());
-        else return ResponseEntity.ok(ResponseDTO.builder().status(Status.ERROR.getStatus())
+        else return ResponseEntity.ok(ResponseDTO.builder().status(Status.CHECKING_FAILED.getStatus())
                 .errors(errors)
                 .build());
     }

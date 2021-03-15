@@ -8,4 +8,5 @@ import java.util.*;
 public interface PersonalDataRepository extends CrudRepository<PersonalData, Long> {
 PersonalData getByForeignKey(Long key);
 Boolean existsByForeignKey(Long foreignKey);
+Boolean existsByPassportNumber(Long passportNumber);
 }

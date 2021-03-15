@@ -46,10 +46,10 @@ public class AuthorizationController {
         List<Errors> errors = new ArrayList<>();
         userService.existByLogin(registrationDTO.getLogin(), errors);
         validationService.validatePassword(registrationDTO.getPassword(), errors);
-        validationService.validateUserName(registrationDTO.getLogin(), errors);
+        validationService.validateUserLogin(registrationDTO.getLogin(), errors);
         if (errors.size() != 0) {
             return ResponseEntity.ok(ResponseDTO.builder()
-                    .status(Status.ERROR.getStatus())
+                    .status(Status.CHECKING_FAILED.getStatus())
                     .errors(errors)
                     .build());
         } else {

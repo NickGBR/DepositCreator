@@ -25,7 +25,8 @@ function sendRegistrationRequest(personalDataDto, callback) {
 
 
 function getCreatingStatus(data) {
-    console.log(data + "fdsfsfdsf")
+    console.log(data)
+
     if(data.status === 0){
         alert("Данные успешно добавлены.")
         changePage(api.MAIN_PAGE, sessionStorage.getItem(keys.AUTHORIZATION_TOKEN))

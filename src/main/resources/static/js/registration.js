@@ -41,7 +41,7 @@ function getCreatingStatus(jsonData) {
             alert("Регистрация прошла успешно")
             callLoginPage();
             break;
-        case 1:
+        case 2:
             handleErrors(jsonData.errors);
             break;
         default:

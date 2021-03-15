@@ -21,7 +21,7 @@ import ru.interns.deposit.external.deposit.dto.DepositDTO;
 import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
 import ru.interns.deposit.external.deposit.dto.DepositResponseDTO;
 import ru.interns.deposit.external.enums.RequestStatus;
-import ru.interns.deposit.external.enums.Status;
+import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.util.Api;
 import java.util.*;
 

@@ -30,15 +30,28 @@ public class PersonalDataService {
     public List<Errors> add(PersonalDataDTO personalDataDTO) {
         final List<Errors> errors = new ArrayList<>();
         final PersonalData personalData = personalDataMapper.toEntity(personalDataDTO);
+
         if (personalDataRepository.existsByForeignKey(userService
                 .getCurrentUser()
                 .getId())) {
             errors.add(Errors.PERSONAL_DATA_ALREADY_EXIST);
             return errors;
-        } else {
+        } if (personalDataRepository.existsByPassportNumber(personalDataDTO.getPassportNumber())){
+            errors.add(Errors.PASSPORT_ALREADY_EXIST);
+        }
+
+        validationService.validateDateOfBirthday(personalData.getDateOfBirthday(), errors);
+        validationService.validatePassport(personalData.getPassportNumber(), errors);
+        validationService.validateUserName(personalData.getName(), errors);
+        validationService.validateUserSurname(personalData.getSurname(), errors);
+
+        if (errors.size() == 0){
             personalData.setForeignKey(userService.getCurrentUser().getId());
             personalDataRepository.save(personalData);
             return null;
+        }
+        else {
+            return errors;
         }
     }
 

@@ -3,7 +3,9 @@ package ru.interns.deposit.service.enums;
 public enum Status {
 
     SUCCESS(0),
-    ERROR(1);
+    WAITING(1),
+    CHECKING_FAILED(2);
+
     private final int status;
 
     Status(int status) {
