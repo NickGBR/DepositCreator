@@ -9,7 +9,9 @@ public enum Errors {
 
     MVD_PERSONAL_DATA_DOESNT_EXIST(6),
     MVD_TERRORIST_ERROR(7),
-    MVD_TIME_OUT_ERROR(8);
+    MVD_TIME_OUT_ERROR(8),
+
+    CHEATER_DETECTED(20);
 
     private int status;
 

@@ -3,7 +3,7 @@ package ru.interns.deposit.external.handler.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.interns.deposit.dto.UserDTO;
-import ru.interns.deposit.external.cheater.service.impl.CheaterService;
+import ru.interns.deposit.external.cheater.service.CheaterService;
 import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.external.handler.CheckingRequestHandler;
 import ru.interns.deposit.external.mvd.service.MVDService;

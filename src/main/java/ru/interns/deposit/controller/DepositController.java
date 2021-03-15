@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
 import ru.interns.deposit.db.temprorary.LoginInfoService;
+import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
 import ru.interns.deposit.dto.ResponseDTO;
 import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.enums.Services;
@@ -51,7 +51,7 @@ public class DepositController {
         // Mock для открытия депозит сервиса без проверок
         // depositService.open(mapper.toUserDto(personalDataService.get()));
         Map<Services, Status> servicesInfo = new HashMap<>();
-        servicesInfo.put(Services.CHEATER, Status.SUCCESS);
+        servicesInfo.put(Services.CHEATER, Status.WAITING);
         servicesInfo.put(Services.MVD, Status.WAITING);
         final List<Errors> errors = new ArrayList<>();
 
