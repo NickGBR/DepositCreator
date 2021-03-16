@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import ru.interns.deposit.db.temprorary.LoginInfoService;
 
 import java.util.Date;
 import java.util.UUID;

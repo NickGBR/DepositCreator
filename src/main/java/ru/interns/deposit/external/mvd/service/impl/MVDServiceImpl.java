@@ -20,13 +20,12 @@ import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.enums.Services;
 import ru.interns.deposit.external.deposit.DepositService;
 import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
-import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.external.mvd.dto.MvdRequestDTO;
 import ru.interns.deposit.external.mvd.dto.CheckingInfo;
 import ru.interns.deposit.external.mvd.enums.CheckType;
-import ru.interns.deposit.external.mvd.enums.MvdErrors;
 import ru.interns.deposit.external.mvd.service.MVDService;
 import ru.interns.deposit.service.enums.Errors;
+import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.service.impl.PersonalDataService;
 import ru.interns.deposit.service.impl.UserService;
 

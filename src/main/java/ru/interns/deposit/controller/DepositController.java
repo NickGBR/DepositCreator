@@ -13,11 +13,11 @@ import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.enums.Services;
 import ru.interns.deposit.external.deposit.DepositService;
 import ru.interns.deposit.external.deposit.dto.DepositResponseDTO;
-import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.external.mvd.dto.CheckingInfo;
 import ru.interns.deposit.mapper.PersonalDataMapper;
 import ru.interns.deposit.service.DepositCheckerService;
 import ru.interns.deposit.service.enums.Errors;
+import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.service.impl.PersonalDataService;
 import ru.interns.deposit.service.impl.UserService;
 

@@ -16,3 +16,4 @@
 14. Нажимаем clean
 15. Запускае проект, в процессе запуска создадутся необходимые таблицы в Бд
 16. Открывем плагин flyway, нажимаем baseline, затем migrate
+17. Скачать и установть ActiveMq https://activemq.apache.org/components/classic/download/

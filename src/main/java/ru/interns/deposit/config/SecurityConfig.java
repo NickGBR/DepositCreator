@@ -18,7 +18,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import ru.interns.deposit.security.JwtTokenFilter;
 import ru.interns.deposit.util.Api;
-//import ru.interns.deposit.security.JwtConfigurer;
 
 @Configuration
 @EnableWebSecurity
