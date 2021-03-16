@@ -25,8 +25,6 @@ public enum Errors {
     MVD_TERRORIST_ERROR(7),
     MVD_TIME_OUT_ERROR(8);
 
-
-
     private int status;
 
     Errors(int status) {

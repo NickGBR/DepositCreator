@@ -31,6 +31,8 @@ public class PersonalDataService {
         final List<Errors> errors = new ArrayList<>();
         final PersonalData personalData = personalDataMapper.toEntity(personalDataDTO);
 
+        System.out.println(personalData.getName());
+
         if (personalDataRepository.existsByForeignKey(userService
                 .getCurrentUser()
                 .getId())) {

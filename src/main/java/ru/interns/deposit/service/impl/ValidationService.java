@@ -5,20 +5,9 @@ import ru.interns.deposit.service.enums.Errors;
 import ru.interns.deposit.service.enums.RegExp;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class ValidationService {
-
-    public static void main(String[] args) {
-        Pattern pattern = Pattern.compile("A.+");
-        Matcher matcher = pattern.matcher("Никита");
-        String name = "42345";
-        final boolean matches = name.matches("[0-9]+");
-        System.out.println(matches);
-
-    }
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
@@ -80,7 +69,7 @@ public class ValidationService {
         }
     }
 
-    public void validateDateOfBirthday(Date dateOfBirthday, List<Errors> errors) {
+    public boolean validateDateOfBirthday(Date dateOfBirthday, List<Errors> errors) {
         Calendar now = new GregorianCalendar();
         Calendar date = new GregorianCalendar();
         date.setTime(dateOfBirthday);
@@ -94,9 +83,8 @@ public class ValidationService {
         }
         if (age < 14) {
             errors.add(Errors.USER_AGE_IS_UNDER_14);
+            return false;
         }
-        System.out.println(age);
+        return true;
     }
-
-
 }
