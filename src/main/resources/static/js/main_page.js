@@ -249,10 +249,11 @@ function getDepositsRequest() {
 
 function handleDepositsRequest(request) {
     let json = JSON.parse(request.responseText);
+    console.log(json)
     if (request.status === 200) {
         const status = json.status;
         switch (status) {
-            case 'GOT_DEPOSITS_SUCCESSFULLY':
+            case statuses.SUCCESS:
                 hideElement(youDontHaveDepositsHolder);
                 hideElement(depositsGettingSpinner);
                 hideElement(depositOpeningSpinnerDiv);
@@ -263,7 +264,7 @@ function handleDepositsRequest(request) {
                 showTableWithDeposits(json)
 
                 break;
-            case 'DEPOSITS_DONT_EXIST':
+            case statuses.ERROR:
                 hideElement(depositsTableDiv)
                 hideElement(depositsGettingErrorDiv)
                 hideElement(depositsGettingSpinner);
@@ -284,6 +285,7 @@ function handleDepositsRequest(request) {
         }
     }
     if (request.status === 500) {
+        console.log(errors.text.SERVER_PROBLEM)
         showElement(depositsGettingErrorDiv);
         hideElement(youDontHaveDepositsHolder);
         hideElement(depositsTableDiv);

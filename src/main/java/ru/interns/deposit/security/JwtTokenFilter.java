@@ -32,7 +32,6 @@ public class JwtTokenFilter extends GenericFilterBean {
         if(token==null){
             token = jwtTokenProvider.resolveTokenFromHeader((HttpServletRequest) servletRequest);
         }
-        log.info(token);
         try {
             if (!checkRequestURL(servletRequest) && token != null && jwtTokenProvider.validateToken(token)) {
                 final Authentication authentication = jwtTokenProvider.getAuthentication(token);

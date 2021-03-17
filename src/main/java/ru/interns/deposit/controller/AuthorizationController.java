@@ -1,5 +1,6 @@
 package ru.interns.deposit.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+@Slf4j
 @RestController
 @RequestMapping("api/v1/auth/")
 public class AuthorizationController {
@@ -66,8 +68,10 @@ public class AuthorizationController {
         try {
             securityService.authenticateUser(request.getLogin(), request.getPassword());
             final User user = userService.getUserByLogin(request.getLogin());
+            log.info("Пользователь " + user.getLogin() + " авторизировался.");
             return ResponseEntity.ok(securityService.getJwtTokenForUser(user));
         } catch (AuthenticationException e) {
+            log.warn("Произошла ошибка авторизации.");
             return new ResponseEntity<>(ClientErrorCode.INVALID_LOGIN_PASSWORD, HttpStatus.FORBIDDEN);
         }
     }

@@ -1,5 +1,6 @@
 package ru.interns.deposit.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,8 @@ public class PersonalDataService {
                 .getId())) {
             errors.add(Errors.PERSONAL_DATA_ALREADY_EXIST);
             return errors;
-        } if (personalDataRepository.existsByPassportNumber(personalDataDTO.getPassportNumber())){
+        }
+        if (personalDataRepository.existsByPassportNumber(personalDataDTO.getPassportNumber())) {
             errors.add(Errors.PASSPORT_ALREADY_EXIST);
         }
 
@@ -46,13 +48,14 @@ public class PersonalDataService {
         validationService.validatePassport(personalData.getPassportNumber(), errors);
         validationService.validateUserName(personalData.getName(), errors);
         validationService.validateUserSurname(personalData.getSurname(), errors);
+        if (!personalData.getMiddleName().equals(""))
+            validationService.validateUserMiddleName(personalData.getMiddleName(), errors);
 
-        if (errors.size() == 0){
+        if (errors.size() == 0) {
             personalData.setForeignKey(userService.getCurrentUser().getId());
             personalDataRepository.save(personalData);
             return null;
-        }
-        else {
+        } else {
             return errors;
         }
     }

@@ -101,6 +101,18 @@ function handleErrors(errorsList) {
                 setError(date_of_birthday_div)
                 showErrorText(errors.text.USER_AGE_IS_UNDER_14)
                 break;
+            case errors.USER_MIDDLE_NAME_IS_INVALID:
+                setError(middle_name_div)
+                showErrorText(errors.text.USER_MIDDLE_NAME_IS_INVALID)
+                break
+            case errors.USER_MIDDLE_NAME_IS_TOO_LONG:
+                setError(middle_name_div)
+                showErrorText(errors.text.USER_MIDDLE_NAME_IS_TOO_LONG)
+                break
+            case errors.USER_MIDDLE_NAME_IS_TOO_SHORT:
+                setError(middle_name_div)
+                showErrorText(errors.text.USER_MIDDLE_NAME_IS_TOO_SHORT)
+                break
             default:
                 showErrorText("ПОЛУЧЕНА НЕИЗВЕСТНАЯ ОШИБКА.")
         }
@@ -152,6 +164,7 @@ function checkAddress(obj) {
 
 function checkInputs() {
     let result = true;
+    setSuccess(middle_name_div)
     if (!checkInput(name_input, name_div)) result = false;
     if (!checkInput(surname_input, surname_div)) result = false;
     if (!checkInput(passport_number_input, passport_number_div)) result = false;

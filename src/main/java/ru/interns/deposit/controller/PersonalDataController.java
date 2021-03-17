@@ -1,5 +1,6 @@
 package ru.interns.deposit.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,10 +10,11 @@ import ru.interns.deposit.mapper.PersonalDataMapper;
 import ru.interns.deposit.service.enums.Errors;
 import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.service.impl.PersonalDataService;
+import ru.interns.deposit.service.impl.UserService;
 
 import java.util.*;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/user/personal_data/")
 public class PersonalDataController {
@@ -27,16 +29,21 @@ public class PersonalDataController {
 
     @PostMapping("/add")
     public ResponseEntity<ResponseDTO> addData(@RequestBody PersonalDataDTO personalData) {
+        log.info("Получен зарпос на добавление персональных данных от пользователя");
         final List<Errors> errors = personalDataService.add(personalData);
-        if (errors == null)
+        if (errors == null) {
+            log.info("Персональные данные успешно добавлены");
             return ResponseEntity.ok(ResponseDTO.builder().status(Status.SUCCESS.getStatus()).build());
-        else return ResponseEntity.ok(ResponseDTO.builder().status(Status.CHECKING_FAILED.getStatus())
+        }
+        log.warn("Произошла ошибка при добалении персональных данных");
+        return ResponseEntity.ok(ResponseDTO.builder().status(Status.CHECKING_FAILED.getStatus())
                 .errors(errors)
                 .build());
     }
 
     @GetMapping("/get")
     public ResponseEntity<PersonalDataDTO> getPersonalData() {
+        log.info("Получен зарпос на получение персональных данных от пользователя");
         return ResponseEntity.ok(mapper
                 .toDto(personalDataService.get())
         );
@@ -44,6 +51,7 @@ public class PersonalDataController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> deletePersonalData() {
+        log.info("Получен зарпос на удаление персональных данных");
         return ResponseEntity.ok(personalDataService.delete());
     }
 }

@@ -20,9 +20,10 @@ import ru.interns.deposit.external.deposit.DepositService;
 import ru.interns.deposit.external.deposit.dto.DepositDTO;
 import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
 import ru.interns.deposit.external.deposit.dto.DepositResponseDTO;
-import ru.interns.deposit.external.enums.RequestStatus;
+import ru.interns.deposit.service.enums.Errors;
 import ru.interns.deposit.service.enums.Status;
 import ru.interns.deposit.util.Api;
+
 import java.util.*;
 
 @Slf4j
@@ -82,12 +83,8 @@ public class DepositServiceImpl implements DepositService {
         switch (status) {
             case ("ERROR"):
                 return getErrors(response);
-            case ("DEPOSITS_LIST"):
+            case ("SUCCESS"):
                 return getDepositsList(response);
-            case ("USER_DOESNT_HAVE_DEPOSITS"):
-                return DepositResponseDTO.builder()
-                        .status(RequestStatus.DEPOSITS_DONT_EXIST)
-                        .build();
             default:
                 return null;
         }
@@ -95,13 +92,11 @@ public class DepositServiceImpl implements DepositService {
 
     private DepositResponseDTO getErrors(JSONObject response) {
         final JSONArray errorsJson = response.getJSONArray("errors");
-        List<String> errors = new ArrayList<>();
-        for (Object error : errorsJson) {
-            errors.add(error.toString());
-        }
+        List<Errors> errors = new ArrayList<>();
+        getErrors(errorsJson, errors);
         return DepositResponseDTO.builder()
                 .errors(errors)
-                .status(RequestStatus.ERROR)
+                .status(Status.CHECKING_FAILED.getStatus())
                 .build();
     }
 
@@ -109,7 +104,7 @@ public class DepositServiceImpl implements DepositService {
         final List<DepositDTO> depositDTOS = new ArrayList<>();
         final JSONArray deposits = response.getJSONArray("deposits");
         final DepositResponseDTO depositResponseDTO = DepositResponseDTO.builder().build();
-        depositResponseDTO.setStatus(RequestStatus.GOT_DEPOSITS_SUCCESSFULLY);
+        depositResponseDTO.setStatus(Status.SUCCESS.getStatus());
 
         for (Object deposit : deposits) {
             JSONObject depositJson = new JSONObject(deposit.toString());
@@ -130,5 +125,20 @@ public class DepositServiceImpl implements DepositService {
             }
         }
         return true;
+    }
+
+    private void getErrors(JSONArray depositErrors, List<Errors> errors) {
+        for (Object depositError : depositErrors) {
+            switch (depositError.toString()) {
+                case "JSON_PARSE_ERROR":
+                    errors.add(Errors.DEPOSIT_JSON_REQUEST_PARSE_ERROR);
+                    break;
+                case "USER_DOESNT_HAVE_DEPOSITS":
+                    errors.add(Errors.DEPOSIT_USER_DOESNT_HAVE_DEPOSITS);
+                default:
+                    errors.add(Errors.DEPOSIT_UNKNOWN_ERROR);
+                    break;
+            }
+        }
     }
 }

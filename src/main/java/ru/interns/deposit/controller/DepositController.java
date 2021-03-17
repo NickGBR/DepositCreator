@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
 import ru.interns.deposit.db.temprorary.LoginInfoService;
 import ru.interns.deposit.dto.ResponseDTO;
@@ -36,7 +37,7 @@ public class DepositController {
     private final DepositService depositService;
 
     @Autowired
-    public DepositController(@Qualifier("depositCheckerServiceImpl")DepositCheckerService checkerService, PersonalDataMapper mapper,
+    public DepositController(@Qualifier("depositCheckerServiceImpl") DepositCheckerService checkerService, PersonalDataMapper mapper,
                              PersonalDataService personalDataService, UserService userService,
                              DepositService depositService) {
         this.checkerService = checkerService;
@@ -72,14 +73,24 @@ public class DepositController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<DepositResponseDTO> getDeposits(Long passportNumber) {
+    public ResponseEntity<DepositResponseDTO> getDeposits() {
+        final PersonalData personalData = personalDataService.get();
 
-        return ResponseEntity.ok(depositService.getDeposits(personalDataService.get().getPassportNumber()));
+        if (personalData == null) {
+            final List<Errors> errors = new ArrayList<>();
+            errors.add(Errors.PERSONAL_DATA_DOESNT_EXIST);
+            return ResponseEntity.ok(DepositResponseDTO.builder()
+                    .status(Status.CHECKING_FAILED.getStatus())
+                    .errors(errors)
+                    .build());
+        }
+
+        return ResponseEntity.ok(depositService.getDeposits(personalData.getPassportNumber()));
     }
 
     @GetMapping("/check_status")
     // ОСТАНОВИЛСЯ ТУТ
-    public ResponseEntity<ResponseDTO> checkOpeningStatus(){
+    public ResponseEntity<ResponseDTO> checkOpeningStatus() {
         return ResponseEntity.ok(UserCheckingRequestsInfo.result
                 .get(userService.getCurrentUser().getLogin()).toResponseDTO());
     }
