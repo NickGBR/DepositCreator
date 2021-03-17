@@ -11,7 +11,7 @@ import ru.interns.deposit.service.enums.Errors;
 
 import java.util.*;
 
-@Builder
+/*@Builder
 @Getter
 public class CheckingInfo {
     private Map<Services, Status> serviceStatus;
@@ -37,4 +37,4 @@ public class CheckingInfo {
                 .status(Status.SUCCESS.getStatus())
                 .build();
     }
-}
+}*/

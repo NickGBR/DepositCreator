@@ -12,9 +12,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.interns.deposit.db.temprorary.LoginInfoService;
-import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
+//import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
 import ru.interns.deposit.enums.Services;
 import ru.interns.deposit.external.deposit.DepositService;
 import ru.interns.deposit.external.deposit.dto.DepositDTO;
@@ -22,17 +23,33 @@ import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
 import ru.interns.deposit.external.deposit.dto.DepositResponseDTO;
 import ru.interns.deposit.external.enums.RequestStatus;
 import ru.interns.deposit.external.enums.Status;
+import ru.interns.deposit.service.impl.UserService;
 import ru.interns.deposit.util.Api;
+import ru.interns.deposit.util.Cache;
+
 import java.util.*;
 
 @Slf4j
 @Component
 public class DepositServiceImpl implements DepositService {
+    private UserService userService;
+
+
+    @Autowired
+    public DepositServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
     public DepositResponseDTO checkAndOpen(DepositRequestDTO request) {
 
-        if (checkSuccess(UserCheckingRequestsInfo
+/*        if (checkSuccess(UserCheckingRequestsInfo
                 .result.get(LoginInfoService
-                        .data.get(request.getUuid())).getServiceStatus())) open(request);
+                        .data.get(request.getUuid())).getServiceStatus())) {
+            open(request);
+        }*/
+
+/*        if (checkSuccess(Cache.getUser(userService.getCurrentUser().getLogin()).getServiceStatus())) {
+            open(request);
+        }*/
         return null;
     }
 

@@ -6,6 +6,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.Message;
 import org.apache.activemq.command.ActiveMQMessage;
+import org.apache.ignite.Ignite;
+import org.apache.ignite.binary.BinaryObject;
+import org.apache.ignite.cache.CacheEntry;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,37 +18,48 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import ru.interns.deposit.db.dao.PersonalData;
 import ru.interns.deposit.db.temprorary.LoginInfoService;
-import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
+//import ru.interns.deposit.db.temprorary.UserCheckingRequestsInfo;
+import ru.interns.deposit.dto.ApacheIgniteDTO;
 import ru.interns.deposit.dto.UserDTO;
 import ru.interns.deposit.enums.Services;
 import ru.interns.deposit.external.deposit.DepositService;
 import ru.interns.deposit.external.deposit.dto.DepositRequestDTO;
 import ru.interns.deposit.external.enums.Status;
 import ru.interns.deposit.external.mvd.dto.MvdRequestDTO;
-import ru.interns.deposit.external.mvd.dto.CheckingInfo;
+//import ru.interns.deposit.external.mvd.dto.CheckingInfo;
 import ru.interns.deposit.external.mvd.enums.CheckType;
-import ru.interns.deposit.external.mvd.enums.MvdErrors;
 import ru.interns.deposit.external.mvd.service.MVDService;
+import ru.interns.deposit.external.mvd.thread.CheckTimeOut;
 import ru.interns.deposit.service.enums.Errors;
 import ru.interns.deposit.service.impl.PersonalDataService;
 import ru.interns.deposit.service.impl.UserService;
+import ru.interns.deposit.util.Cache;
 
 import javax.jms.JMSException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @Slf4j
 public class MVDServiceImpl implements MVDService {
     private static final String DESTINATION_NAME_LISTENER = "response";
     private static final String DESTINATION_NAME_CONSUMER = "request";
-    private static final List<UUID> correlationIdList = new ArrayList<>();
+    public static final Map<UUID, Date> sendDateMap = new HashMap<>();
 
     private final JmsTemplate jmsTemplate;
     private final DepositService depositService;
     private final UserService userService;
     private final PersonalDataService personalDataService;
+
+    @Autowired
+    private Ignite ignite;
+
+    //запускаем поток для проверки time_out сообщений
+    {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(new CheckTimeOut());
+    }
 
     @Autowired
     public MVDServiceImpl(JmsTemplate jmsTemplate, DepositService depositService, UserService userService, PersonalDataService personalDataService) {
@@ -63,21 +77,22 @@ public class MVDServiceImpl implements MVDService {
         final String correlationID = message.getJMSCorrelationID();
         final UUID uuid = UUID.fromString(correlationID);
 
-        if (correlationIdList.contains(uuid)) {
+        if (sendDateMap.containsKey(uuid)) {
             final String login = LoginInfoService.data.get(uuid);
 
-            final CheckingInfo checkingInfo = UserCheckingRequestsInfo.result.get(login);
+            // CheckingInfo checkingInfo = UserCheckingRequestsInfo.result.get(login);
 
-            getStatus(jsonObject, checkingInfo);
+            getStatus(jsonObject,uuid, login);
 
             checkAndOpenDepositForUserByUuid(uuid, login);
-            correlationIdList.remove(uuid);
+            sendDateMap.remove(uuid);
         }
     }
 
     @Override
     @SneakyThrows
     public void checkUser(UserDTO userDTO) {
+
         final MvdRequestDTO mvdRequestDTO = MvdRequestDTO.builder()
                 .checkTypeCode(CheckType.DEFAULT_CHECK_ALL.getCode())
                 .dateOfBirthday(userDTO.getDateOfBirthday())
@@ -96,7 +111,7 @@ public class MVDServiceImpl implements MVDService {
 
         jmsTemplate.convertAndSend(DESTINATION_NAME_CONSUMER, message);
 
-        correlationIdList.add(userDTO.getUuid());
+        sendDateMap.put(userDTO.getUuid(), new Date());
     }
 
     private void checkAndOpenDepositForUserByUuid(UUID uuid, String login) {
@@ -110,23 +125,43 @@ public class MVDServiceImpl implements MVDService {
         depositService.checkAndOpen(requestDTO);
     }
 
-    private void getStatus(JSONObject response, CheckingInfo checkingInfo) {
+    private void getStatus(JSONObject response, UUID uuid, String login) {
         final String status = response.getString("checkingStatus");
+        //IgniteCache<UUID, ClientDTO> cache = ignite.cache("my-cache2");
         switch (status) {
             case "SUCCESS":
-                checkingInfo.getServiceStatus().put(Services.MVD, Status.SUCCESS);
+                ApacheIgniteDTO apacheIgniteDTO = Cache.cache.get(login);
+                apacheIgniteDTO.getServiceStatus().put(Services.MVD, Status.SUCCESS);
+                Cache.cache.replace(login, apacheIgniteDTO);
+
+                //checkingInfo.getServiceStatus().put(Services.MVD, Status.SUCCESS);
                 break;
             case "WAITING":
-                checkingInfo.getServiceStatus().put(Services.MVD, Status.WAITING);
+                ApacheIgniteDTO apacheIgniteDTO2 = (ApacheIgniteDTO) ignite.cache("my-cache2").get(login);
+                apacheIgniteDTO2.getServiceStatus().put(Services.MVD, Status.WAITING);
+                Cache.cache.replace(login, apacheIgniteDTO2);
+                //checkingInfo.getServiceStatus().put(Services.MVD, Status.WAITING);
                 break;
             case "CHECKING_FAILED":
-                checkingInfo.getServiceStatus().put(Services.MVD, Status.CHECKING_FAILED);
+                System.out.println(ignite.cache("my-cache2").get(login));
+                //ApacheIgniteDTO apacheIgniteDTO3 = (ApacheIgniteDTO) ignite.cache("my-cache2").get(login);
+                //CacheEntry<Object, Object> entry = ignite.cache("my-cache2").getEntry(login);
+                //BinaryObject bo = (BinaryObject) ignite.cache("my-cache2").get(login);
+                //ApacheIgniteDTO apacheIgniteDTO3 = bo.deserialize();
+                //ApacheIgniteDTO apacheIgniteDTO3 = (ApacheIgniteDTO) entry.getValue();
+                //ClientDTO clientDTO3 = Cache.cache.get(login);
+                BinaryObject bo = (BinaryObject) ignite.cache("my-cache2").get(login);
+                ApacheIgniteDTO apacheIgniteDTO3 =  bo.deserialize();
+                apacheIgniteDTO3.getServiceStatus().put(Services.MVD, Status.CHECKING_FAILED);
+
+                //checkingInfo.getServiceStatus().put(Services.MVD, Status.CHECKING_FAILED);
                 getErrors(response.getJSONArray("mvdErrorsList"),
-                        checkingInfo.getErrors());
+                        apacheIgniteDTO3.getErrors());
+                Cache.cache.replace(login, apacheIgniteDTO3);
+
                 break;
             default:
                 log.info("Неизвестный статус от МВД сервера");
-                break;
         }
     }
 

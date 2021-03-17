@@ -18,12 +18,21 @@
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <java.version>1.8</java.version>
+        <ignite.version>2.9.0</ignite.version>
+        <h2.version>1.4.197</h2.version>
+        <spring.boot.autoconfigure.version>1.0.0</spring.boot.autoconfigure.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -107,6 +116,34 @@
             <version>0.0.20131108.vaadin1</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--Apache Ignate-->
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-core</artifactId>
+            <version>${ignite.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-spring</artifactId>
+            <version>${ignite.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-log4j2</artifactId>
+            <version>${ignite.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-indexing</artifactId>
+            <version>${ignite.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-spring-boot-autoconfigure-ext</artifactId>
+            <version>${spring.boot.autoconfigure.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -148,21 +185,6 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>7.0.2</version>
-                <configuration>
-                    <configFiles>${pom.basedir}/src/main/resources/flyway_conf/flyway.conf</configFiles>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>42.2.17.jre7</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
