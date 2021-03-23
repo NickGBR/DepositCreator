@@ -16,7 +16,7 @@ let depositsGettingErrorDiv;
 let depositsGettingSpinner;
 let mvdCheckingTimeoutErrorDiv;
 
-let depositOpeningCheckingTimeout = 5000;
+let depositOpeningCheckingTimeout = 1000;
 let depositOpeningCheckingIntervalId;
 let save = "x-auth-token";
 
